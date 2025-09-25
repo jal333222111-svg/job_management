@@ -118,17 +118,76 @@ export default function Welcome() {
                 </section>
 
                 {/* Contact */}
-                <section className="w-full bg-[#f9f9f9] dark:bg-[#111] py-20 px-6 lg:px-32 text-center">
-                    <h2 className="text-2xl font-semibold mb-4 lg:text-4xl">Kontak Kami</h2>
-                    <p className="max-w-2xl mx-auto mb-6 text-[#555] dark:text-[#ccc]">
-                        Hubungi kami melalui email atau media sosial untuk pertanyaan dan dukungan.
-                    </p>
-                    <div className="flex flex-col gap-4 sm:flex-row justify-center">
-                        <a href="mailto:info@aplikasi.com" className="rounded-md border px-6 py-3 hover:bg-[#e0e0e0] dark:border-[#EDEDEC] dark:hover:bg-[#222]">Email</a>
-                        <a href="https://www.tiktok.com/@aplikasi" target="_blank" className="rounded-md border px-6 py-3 hover:bg-[#e0e0e0] dark:border-[#EDEDEC] dark:hover:bg-[#222]">TikTok</a>
-                        <a href="https://www.instagram.com/aplikasi" target="_blank" className="rounded-md border px-6 py-3 hover:bg-[#e0e0e0] dark:border-[#EDEDEC] dark:hover:bg-[#222]">Instagram</a>
+                
+
+                {/* Footer */}
+                <footer className="w-full bg-gray-600 dark:bg-gray-800 text-white">
+                    <div className="max-w-7xl mx-auto py-10 px-6 lg:px-32 flex flex-col md:flex-row justify-between gap-10 md:gap-0 text-sm">
+                        {/* Logo */}
+                        <div className="flex items-center md:flex-1">
+                            <img
+                                src="/path/to/upilogo.png"
+                                alt="UPI Logo"
+                                className="h-10 mr-3"
+                            />
+                            <div className="hidden md:block text-xs">
+                                <p>Universitas Pendidikan Indonesia</p>
+                                <p className="text-[10px]">The Education University</p>
+                            </div>
+                        </div>
+
+                        {/* Contact Us */}
+                        <div className="md:flex-1">
+                            <h4 className="font-semibold mb-3 border-b border-white w-24 pb-1">Contact Us</h4>
+                            <p className="text-xs leading-relaxed">
+                                Universitas Pendidikan Indonesia<br />
+                                Jl. Dr. Setiabudhi No. 229 Bandung 40154<br />
+                                Jawa Barat - Indonesia<br />
+                                E-mail: <a href="mailto:sekuniv_upi@upi.edu" className="underline">sekuniv_upi@upi.edu</a>
+                            </p>
+                        </div>
+
+                        {/* Important Links */}
+                        <div className="md:flex-1">
+                            <h4 className="font-semibold mb-3 border-b border-white w-28 pb-1">Important Links</h4>
+                            <ul className="text-xs space-y-1">
+                                <li><a href="#" className="hover:underline">Student Portal</a></li>
+                                <li><a href="#" className="hover:underline">Library</a></li>
+                                <li><a href="#" className="hover:underline">UPI Journal</a></li>
+                            </ul>
+                        </div>
+
+                        {/* Follow Us */}
+                        <div className="md:flex-1">
+                            <h4 className="font-semibold mb-3 border-b border-white w-20 pb-1">Follow Us</h4>
+                            <div className="flex space-x-4 text-xl">
+                                <a href="https://twitter.com/upiofficial" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="hover:opacity-80">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-6 h-6" viewBox="0 0 24 24">
+                                        <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
+                                    </svg>
+                                </a>
+                                <a href="https://facebook.com/upiofficial" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="hover:opacity-80">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-6 h-6" viewBox="0 0 24 24">
+                                        <path d="M22 12a10 10 0 1 0-11 9.95V14.89h-2v-3h2v-2c0-2 1-3 3-3h2v3h-1c-.5 0-1 .5-1 1v1h3l-1 3h-2v7.06A10 10 0 0 0 22 12z"/>
+                                    </svg>
+                                </a>
+                                <a href="https://instagram.com/upiofficial" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:opacity-80">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-6 h-6" viewBox="0 0 24 24">
+                                        <path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm0 2h10c1.7 0 3 1.3 3 3v10c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3zm5 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm4.5-.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                                    </svg>
+                                </a>
+                                <a href="https://tiktok.com/@upiofficial" target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="hover:opacity-80">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-6 h-6" viewBox="0 0 24 24">
+                                        <path d="M9 2a7 7 0 0 0 7 7v5a5 5 0 1 1-5-5V2z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
                     </div>
-                </section>
+                    <div className="bg-black text-center text-xs py-3">
+                        © Universitas Pendidikan Indonesia 2025
+                    </div>
+                </footer>
             </div>
         </>
     );
