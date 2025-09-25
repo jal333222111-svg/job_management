@@ -13,7 +13,9 @@ export default function Welcome() {
                     href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600"
                     rel="stylesheet"
                 />
+                
             </Head>
+
 
 
             <div className="flex flex-col items-center bg-[#FDFDFC] text-[#1b1b18] dark:bg-[#0a0a0a] dark:text-[#EDEDEC] w-full">
@@ -31,11 +33,15 @@ export default function Welcome() {
                         <>
                            
                             <Link
-                                href={register()}
-                                className="rounded-md border border-[#19140035] px-5 py-2 text-sm hover:border-[#1915014a] dark:border-[#3E3E3A] dark:hover:border-[#62605b]"
-                            >
-                                Register
-                            </Link>
+    href={register()}
+    className="rounded-md px-5 py-2 text-sm text-white"
+    style={{
+        background: 'linear-gradient(90deg, #0000ff, #ff0000)', // biru ke merah
+    }}
+>
+    Register
+</Link>
+
                         </>
                     )}
                 </header>
@@ -52,12 +58,18 @@ export default function Welcome() {
                         <div className="flex gap-4">
                             <Link
                                 href={register()}
+                                style={{
+                                background: 'linear-gradient(90deg, #0000ff, #ff0000)', // biru ke merah
+                           }}
                                 className="rounded-md bg-[#1b1b18] px-6 py-3 text-sm text-white hover:bg-[#333] dark:bg-[#EDEDEC] dark:text-[#0a0a0a] dark:hover:bg-[#ccc]"
                             >
                                 Mulai Sekarang
                             </Link>
                             <Link
                                 href={login()}
+                                style={{
+                             background: 'linear-gradient(90deg, #0000ff, #ff0000)', // biru ke merah
+                            }}
                                 className="rounded-md border border-[#1b1b18] px-6 py-3 text-sm hover:bg-[#f0f0f0] dark:border-[#EDEDEC] dark:hover:bg-[#222]"
                             >
                                 Log in
