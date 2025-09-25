@@ -15,6 +15,7 @@ export default function Welcome() {
                 />
             </Head>
 
+
             <div className="flex flex-col items-center bg-[#FDFDFC] text-[#1b1b18] dark:bg-[#0a0a0a] dark:text-[#EDEDEC] w-full">
 
                 {/* Header */}
@@ -28,12 +29,7 @@ export default function Welcome() {
                         </Link>
                     ) : (
                         <>
-                            <Link
-                                href={login()}
-                                className="rounded-md border border-transparent px-5 py-2 text-sm hover:border-[#19140035] dark:hover:border-[#3E3E3A]"
-                            >
-                                Log in
-                            </Link>
+                           
                             <Link
                                 href={register()}
                                 className="rounded-md border border-[#19140035] px-5 py-2 text-sm hover:border-[#1915014a] dark:border-[#3E3E3A] dark:hover:border-[#62605b]"
@@ -117,8 +113,6 @@ export default function Welcome() {
                     </div>
                 </section>
 
-                {/* Contact */}
-                
 
                 {/* Footer */}
                 <footer className="w-full bg-gray-600 dark:bg-gray-800 text-white">
@@ -138,8 +132,8 @@ export default function Welcome() {
 
                         {/* Contact Us */}
                         <div className="md:flex-1">
-                            <h4 className="font-semibold mb-3 border-b border-white w-24 pb-1">Contact Us</h4>
-                            <p className="text-xs leading-relaxed">
+                          <h4 className="font-semibold mb-3 border-b border-white w-25 pb-1 text-xl">Contact Us</h4>
+                            <p className="text-xs leading-relaxed ">
                                 Universitas Pendidikan Indonesia<br />
                                 Jl. Dr. Setiabudhi No. 229 Bandung 40154<br />
                                 Jawa Barat - Indonesia<br />
@@ -149,8 +143,8 @@ export default function Welcome() {
 
                         {/* Important Links */}
                         <div className="md:flex-1">
-                            <h4 className="font-semibold mb-3 border-b border-white w-28 pb-1">Important Links</h4>
-                            <ul className="text-xs space-y-1">
+                            <h4 className="font-semibold mb-3 border-b border-white w-28 pb-1 text-xl">Important Links</h4>
+                            <ul className="text-xs space-y-1 ">
                                 <li><a href="#" className="hover:underline">Student Portal</a></li>
                                 <li><a href="#" className="hover:underline">Library</a></li>
                                 <li><a href="#" className="hover:underline">UPI Journal</a></li>
@@ -159,7 +153,7 @@ export default function Welcome() {
 
                         {/* Follow Us */}
                         <div className="md:flex-1">
-                            <h4 className="font-semibold mb-3 border-b border-white w-20 pb-1">Follow Us</h4>
+                            <h4 className="font-semibold mb-3 border-b border-white w-20 pb-1 text-xl">Follow Us</h4>
                             <div className="flex space-x-4 text-xl">
                                 <a href="https://twitter.com/upiofficial" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="hover:opacity-80">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-6 h-6" viewBox="0 0 24 24">
@@ -189,6 +183,7 @@ export default function Welcome() {
                     </div>
                 </footer>
             </div>
+            
         </>
     );
 }
