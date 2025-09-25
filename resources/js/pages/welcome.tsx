@@ -132,7 +132,7 @@ export default function Welcome() {
                         {/* Logo */}
                         <div className="flex items-center md:flex-1">
                             <img
-                                src="/path/to/upilogo.png"
+                                src="https://blog-edutore-partner.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2020/05/09151949/LOGO-UPI.jpg"
                                 alt="UPI Logo"
                                 className="h-10 mr-3"
                             />
