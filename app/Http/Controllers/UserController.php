@@ -8,19 +8,16 @@ use Inertia\Inertia;
 
 class UserController extends Controller
 {
-    /**
-     * Tampilkan daftar user
-     */
+    // ✅ List user
     public function index()
     {
         $users = User::all()->map(function ($user) {
-            // mapping biar konsisten
             return [
                 'id'        => $user->id,
                 'name'      => $user->name,
                 'email'     => $user->email,
-                'role'      => $user->role ?? 'staff',   // default staff kalau kosong
-                'is_active' => $user->is_active ?? true, // default aktif kalau null
+                'role'      => $user->role ?? 'staff',
+                'is_active' => $user->is_active ?? true,
             ];
         });
 
@@ -29,9 +26,7 @@ class UserController extends Controller
         ]);
     }
 
-    /**
-     * Simpan user baru
-     */
+    // ✅ Simpan user baru
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -42,7 +37,7 @@ class UserController extends Controller
             'is_active'=> 'boolean',
         ]);
 
-        $validated['password'] = bcrypt($validated['password']); // enkripsi password
+        $validated['password'] = bcrypt($validated['password']);
 
         User::create($validated);
 
@@ -50,9 +45,7 @@ class UserController extends Controller
             ->with('success', 'User berhasil ditambahkan');
     }
 
-    /**
-     * Update user
-     */
+    // ✅ Update user
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
@@ -75,9 +68,7 @@ class UserController extends Controller
             ->with('success', 'User berhasil diperbarui');
     }
 
-    /**
-     * Hapus user
-     */
+    // ✅ Hapus user
     public function destroy(User $user)
     {
         $user->delete();
