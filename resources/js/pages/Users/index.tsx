@@ -5,7 +5,14 @@ import { type BreadcrumbItem } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Pencil, Trash2, Users, Plus } from "lucide-react";
 import UserFormModal from "@/components/UserFormModal";
 
@@ -13,8 +20,12 @@ type User = {
   id: number;
   name: string;
   email: string;
+  phone?: string;
+  position?: string;
+  avatar?: string | null;
   role: string;
   is_active: boolean;
+  last_login_at?: string | null;
 };
 
 export default function Index() {
@@ -25,7 +36,9 @@ export default function Index() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  const breadcrumbs: BreadcrumbItem[] = [{ title: "Manajemen User", href: "/users" }];
+  const breadcrumbs: BreadcrumbItem[] = [
+    { title: "Manajemen User", href: "/users" },
+  ];
 
   // 🔹 Filter user sesuai pencarian
   const filteredUsers = users.filter((u) =>
@@ -85,30 +98,53 @@ export default function Index() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-gray-100">
+                  <TableHead>Avatar</TableHead>
                   <TableHead>Nama</TableHead>
                   <TableHead>Email</TableHead>
+                  <TableHead>Telepon</TableHead>
+                  <TableHead>Jabatan</TableHead>
                   <TableHead>Role</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead>Last Login</TableHead>
                   <TableHead className="text-center">Aksi</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredUsers.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center text-gray-500 py-6">
+                    <TableCell colSpan={9} className="text-center text-gray-500 py-6">
                       Belum ada data user
                     </TableCell>
                   </TableRow>
                 ) : (
                   filteredUsers.map((u) => (
                     <TableRow key={u.id} className="hover:bg-gray-50 transition">
+                      {/* Avatar */}
+                      <TableCell>
+                        {u.avatar ? (
+                          <img
+                            src={u.avatar}
+                            alt={u.name}
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
+                        ) : (
+                          <span className="w-10 h-10 flex items-center justify-center rounded-full bg-gray-200 text-gray-500">
+                            {u.name.charAt(0).toUpperCase()}
+                          </span>
+                        )}
+                      </TableCell>
+
                       <TableCell>{u.name}</TableCell>
                       <TableCell>{u.email}</TableCell>
+                      <TableCell>{u.phone || "-"}</TableCell>
+                      <TableCell>{u.position || "-"}</TableCell>
+
                       <TableCell>
                         <span className="px-2 py-1 rounded text-xs font-medium bg-indigo-100 text-indigo-700">
                           {u.role}
                         </span>
                       </TableCell>
+
                       <TableCell>
                         {u.is_active ? (
                           <span className="px-2 py-1 rounded text-xs font-medium bg-green-200 text-green-800">
@@ -120,6 +156,9 @@ export default function Index() {
                           </span>
                         )}
                       </TableCell>
+
+                      <TableCell>{u.last_login_at || "-"}</TableCell>
+
                       <TableCell className="flex gap-2 justify-center">
                         <Button
                           size="sm"

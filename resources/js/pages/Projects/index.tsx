@@ -5,30 +5,45 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { PlusCircle, Trash2 } from "lucide-react";
+import { PlusCircle } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type Project = {
   id: number;
   title: string;
   description: string | null;
   deadline: string | null;
-  status: string;
+  tingkatan: "mudah" | "sedang" | "susah";
+  status: "belum di kerjakan" | "proses" | "selesai";
 };
 
-export default function index() {
+export default function Index() {
   const { projects } = usePage().props as { projects: { data: Project[] } };
   const [title, setTitle] = useState("");
+  const [status, setStatus] = useState<Project["status"]>("belum di kerjakan");
+  const [deadline, setDeadline] = useState("");
+  const [tingkatan, setTingkatan] = useState<Project["tingkatan"]>("sedang");
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    router.post("/projects", { title, status: "pending" });
-    setTitle("");
-  };
 
-  const handleDelete = (id: number) => {
-    if (confirm("Hapus project ini?")) {
-      router.delete(`/projects/${id}`);
-    }
+    router.post("/projects", {
+      title,
+      status,
+      deadline: deadline || null,
+      tingkatan,
+    });
+
+    setTitle("");
+    setStatus("belum di kerjakan");
+    setDeadline("");
+    setTingkatan("sedang");
   };
 
   return (
@@ -40,7 +55,7 @@ export default function index() {
             <CardTitle>Tambah Project</CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="flex gap-2">
+            <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-2">
               <Input
                 type="text"
                 placeholder="Judul project"
@@ -48,6 +63,38 @@ export default function index() {
                 onChange={(e) => setTitle(e.target.value)}
                 required
               />
+
+              {/* Status Dropdown */}
+              <Select value={status} onValueChange={(val) => setStatus(val as Project["status"])}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Pilih status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="belum di kerjakan">Belum dikerjakan</SelectItem>
+                  <SelectItem value="proses">Proses</SelectItem>
+                  <SelectItem value="selesai">Selesai</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {/* Tingkatan Dropdown */}
+              <Select value={tingkatan} onValueChange={(val) => setTingkatan(val as Project["tingkatan"])}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Tingkat kesulitan" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="mudah">Mudah</SelectItem>
+                  <SelectItem value="sedang">Sedang</SelectItem>
+                  <SelectItem value="susah">Susah</SelectItem>
+                </SelectContent>
+              </Select>
+
+              {/* Deadline */}
+              <Input
+                type="date"
+                value={deadline}
+                onChange={(e) => setDeadline(e.target.value)}
+              />
+
               <Button type="submit" className="flex items-center gap-2">
                 <PlusCircle className="w-4 h-4" /> Tambah
               </Button>
@@ -66,8 +113,8 @@ export default function index() {
                 <TableRow>
                   <TableHead>Judul</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead>Tingkatan</TableHead>
                   <TableHead>Deadline</TableHead>
-                  <TableHead className="text-center">Aksi</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -82,17 +129,8 @@ export default function index() {
                     <TableRow key={p.id}>
                       <TableCell>{p.title}</TableCell>
                       <TableCell>{p.status}</TableCell>
+                      <TableCell>{p.tingkatan}</TableCell>
                       <TableCell>{p.deadline || "-"}</TableCell>
-                      <TableCell className="text-center">
-                        <Button
-                          size="sm"
-                          variant="destructive"
-                          className="bg-red-500 hover:bg-red-600"
-                          onClick={() => handleDelete(p.id)}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </TableCell>
                     </TableRow>
                   ))
                 )}

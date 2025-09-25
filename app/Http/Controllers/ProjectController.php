@@ -8,6 +8,7 @@ use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
+    // Menampilkan daftar project
     public function index()
     {
         return Inertia::render('Projects/index', [
@@ -15,13 +16,15 @@ class ProjectController extends Controller
         ]);
     }
 
+    // Menyimpan project baru
     public function store(Request $request)
     {
         $validated = $request->validate([
             'title'       => 'required|string|max:255',
             'description' => 'nullable|string',
             'deadline'    => 'nullable|date',
-            'status'      => 'required|in:pending,in_progress,completed',
+            'tingkatan'   => 'required|in:mudah,sedang,susah',
+            'status'      => 'required|in:belum di kerjakan,proses,selesai',
         ]);
 
         Project::create($validated);
@@ -30,11 +33,20 @@ class ProjectController extends Controller
             ->with('success', 'Project berhasil ditambahkan');
     }
 
-    public function destroy(Project $project)
+    // Update project
+    public function update(Request $request, Project $project)
     {
-        $project->delete();
+        $validated = $request->validate([
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'deadline'    => 'nullable|date',
+            'tingkatan'   => 'required|in:mudah,sedang,susah',
+            'status'      => 'required|in:belum di kerjakan,proses,selesai',
+        ]);
+
+        $project->update($validated);
 
         return redirect()->route('projects.index')
-            ->with('success', 'Project berhasil dihapus');
+            ->with('success', 'Project berhasil diperbarui');
     }
 }
