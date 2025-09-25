@@ -14,8 +14,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
+    // ✅ CRUD Users
     Route::get('/users', [UserController::class, 'index'])->name('users.index');
-   // 🔹 Manajemen Project
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+    // ✅ CRUD Projects
     Route::resource('/projects', ProjectController::class);
 });
 
