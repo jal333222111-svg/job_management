@@ -13,37 +13,13 @@ export default function Welcome() {
                     href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600"
                     rel="stylesheet"
                 />
-                
             </Head>
-
-
 
             <div className="flex flex-col items-center bg-[#FDFDFC] text-[#1b1b18] dark:bg-[#0a0a0a] dark:text-[#EDEDEC] w-full">
 
                 {/* Header */}
                 <header className="absolute top-6 right-6 flex gap-4 text-sm lg:top-8 lg:right-8">
-                    {auth.user ? (
-                        <Link
-                            href={dashboard()}
-                            className="rounded-md border border-[#19140035] px-5 py-2 text-sm hover:border-[#1915014a] dark:border-[#3E3E3A] dark:hover:border-[#62605b]"
-                        >
-                            Dashboard
-                        </Link>
-                    ) : (
-                        <>
-                           
-                            <Link
-    href={register()}
-    className="rounded-md px-5 py-2 text-sm text-white"
-    style={{
-        background: 'linear-gradient(90deg, #0000ff, #ff0000)', // biru ke merah
-    }}
->
-    Register
-</Link>
-
-                        </>
-                    )}
+                    {/* Bisa tambahkan menu tambahan di sini */}
                 </header>
 
                 {/* Hero */}
@@ -54,28 +30,34 @@ export default function Welcome() {
                     <p className="max-w-md text-sm lg:text-base text-[#555] dark:text-[#ccc]">
                         Aplikasi ini membantu tim dan perusahaan dalam mengelola tugas, proyek, dan progres pekerjaan dengan efektif.
                     </p>
-                    {!auth.user && (
-                        <div className="flex gap-4">
+
+                    <div className="flex gap-4">
+                        {auth.user ? (
+                            // ✅ Kalau user sudah login → hanya Dashboard
                             <Link
-                                href={register()}
-                                style={{
-                                background: 'linear-gradient(90deg, #0000ff, #ff0000)', // biru ke merah
-                           }}
-                                className="rounded-md bg-[#1b1b18] px-6 py-3 text-sm text-white hover:bg-[#333] dark:bg-[#EDEDEC] dark:text-[#0a0a0a] dark:hover:bg-[#ccc]"
+                                href={dashboard()}
+                                className="rounded-md border border-[#19140035] px-6 py-3 text-sm font-medium text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:hover:border-[#62605b] dark:text-[#EDEDEC]"
                             >
-                                Mulai Sekarang
+                                Dashboard
                             </Link>
-                            <Link
-                                href={login()}
-                                style={{
-                             background: 'linear-gradient(90deg, #0000ff, #ff0000)', // biru ke merah
-                            }}
-                                className="rounded-md border border-[#1b1b18] px-6 py-3 text-sm hover:bg-[#f0f0f0] dark:border-[#EDEDEC] dark:hover:bg-[#222]"
-                            >
-                                Log in
-                            </Link>
-                        </div>
-                    )}
+                        ) : (
+                            // ✅ Kalau belum login → Register + Login
+                            <>
+                                <Link
+                                    href={register()}
+                                    className="rounded-md px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-red-600 hover:opacity-90"
+                                >
+                                    Mulai Sekarang
+                                </Link>
+                                <Link
+                                    href={login()}
+                                    className="rounded-md border px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-red-600 hover:opacity-90 dark:border-[#EDEDEC]"
+                                >
+                                    Log in
+                                </Link>
+                            </>
+                        )}
+                    </div>
                 </section>
 
                 {/* Tentang Kami */}
@@ -125,7 +107,6 @@ export default function Welcome() {
                     </div>
                 </section>
 
-
                 {/* Footer */}
                 <footer className="w-full bg-gray-600 dark:bg-gray-800 text-white">
                     <div className="max-w-7xl mx-auto py-10 px-6 lg:px-32 flex flex-col md:flex-row justify-between gap-10 md:gap-0 text-sm">
@@ -167,6 +148,7 @@ export default function Welcome() {
                         <div className="md:flex-1">
                             <h4 className="font-semibold mb-3 border-b border-white w-20 pb-1 text-xl">Follow Us</h4>
                             <div className="flex space-x-4 text-xl">
+                                {/* Icons */}
                                 <a href="https://twitter.com/upiofficial" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="hover:opacity-80">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-6 h-6" viewBox="0 0 24 24">
                                         <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"/>
@@ -195,7 +177,8 @@ export default function Welcome() {
                     </div>
                 </footer>
             </div>
-            
         </>
     );
 }
+
+

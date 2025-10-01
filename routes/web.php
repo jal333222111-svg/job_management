@@ -25,7 +25,8 @@ Route::middleware(['auth', ])->group(function () {
     Route::get('/projects', [ProjectController::class, 'index'])->name('projects.index');
     Route::post('/projects', [ProjectController::class, 'store'])->name('projects.store');
     Route::put('/projects/{project}', [ProjectController::class, 'update'])->name('projects.update');
-    // Hapus route destroy
+    Route::delete('/projects/{project}', [ProjectController::class, 'destroy'])->name('projects.destroy');
+
 });
 
 require __DIR__.'/settings.php';

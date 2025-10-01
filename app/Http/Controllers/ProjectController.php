@@ -11,7 +11,7 @@ class ProjectController extends Controller
     // Menampilkan daftar project
     public function index()
     {
-        return Inertia::render('Projects/index', [
+        return Inertia::render('Projects/index', [ // huruf besar sesuai folder
             'projects' => Project::latest()->paginate(10),
         ]);
     }
@@ -48,5 +48,14 @@ class ProjectController extends Controller
 
         return redirect()->route('projects.index')
             ->with('success', 'Project berhasil diperbarui');
+    }
+
+    // Hapus project
+    public function destroy(Project $project)
+    {
+        $project->delete();
+
+        return redirect()->route('projects.index')
+            ->with('success', 'Project berhasil dihapus');
     }
 }
