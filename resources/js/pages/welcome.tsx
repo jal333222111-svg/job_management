@@ -61,7 +61,7 @@ export default function Welcome() {
                 </section>
 
                 {/* Tentang Kami */}
-                <section className="w-full bg-[#f9f9f9] dark:bg-[#111] py-20 px-6 lg:px-32 text-center">
+                <section className="w-full bg-[#f9f9f9] dark:bg-[#111] py-20 px-6 lg:px-32 text-center shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out">
                     <h2 className="text-2xl font-semibold mb-4 lg:text-4xl">Tentang Kami</h2>
                     <p className="max-w-2xl mx-auto text-[#555] dark:text-[#ccc]">
                         Aplikasi web ini dirancang untuk memudahkan manajemen pekerjaan dan proyek. 
@@ -71,34 +71,34 @@ export default function Welcome() {
                 </section>
 
                 {/* Fitur */}
-                <section className="w-full py-20 px-6 lg:px-32 text-center">
+                <section className="w-full py-20 px-6 lg:px-32 text-center ">
                     <h2 className="text-2xl font-semibold mb-10 lg:text-4xl">Fitur Unggulan</h2>
                     <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                        <div className="p-6 border rounded-md dark:border-[#3E3E3A]">
+                        <div className="p-6 border rounded-md dark:border-[#3E3E3A] shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out">
                             <h3 className="font-semibold mb-2">Dashboard Admin/Manager</h3>
                             <p className="text-[#555] dark:text-[#ccc]">
                                 Menampilkan ringkasan proyek, pekerjaan aktif, dan progres tim secara realtime.
                             </p>
                         </div>
-                        <div className="p-6 border rounded-md dark:border-[#3E3E3A]">
+                        <div className="p-6 border rounded-md dark:border-[#3E3E3A] shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out">
                             <h3 className="font-semibold mb-2">Manajemen Pekerjaan</h3>
                             <p className="text-[#555] dark:text-[#ccc]">
                                 Input, update, dan pantau semua pekerjaan serta tugas tim dengan mudah.
                             </p>
                         </div>
-                        <div className="p-6 border rounded-md dark:border-[#3E3E3A]">
+                        <div className="p-6 border rounded-md dark:border-[#3E3E3A] shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out">
                             <h3 className="font-semibold mb-2">Penugasan & Notifikasi</h3>
                             <p className="text-[#555] dark:text-[#ccc]">
                                 Menetapkan pekerjaan ke karyawan dan menerima notifikasi saat ada update atau deadline mendekat.
                             </p>
                         </div>
-                        <div className="p-6 border rounded-md dark:border-[#3E3E3A]">
+                        <div className="p-6 border rounded-md dark:border-[#3E3E3A] shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out">
                             <h3 className="font-semibold mb-2">Progres Pekerjaan</h3>
                             <p className="text-[#555] dark:text-[#ccc]">
                                 Pantau status tiap pekerjaan dan progres tim dalam satu tampilan yang mudah dibaca.
                             </p>
                         </div>
-                        <div className="p-6 border rounded-md dark:border-[#3E3E3A]">
+                        <div className="p-6 border rounded-md dark:border-[#3E3E3A] shadow-md hover:shadow-xl transition-shadow duration-300  ease-in-out">
                             <h3 className="font-semibold mb-2">Laporan & Analisis</h3>
                             <p className="text-[#555] dark:text-[#ccc]">
                                 Dapatkan laporan pekerjaan dan performa tim untuk evaluasi dan perencanaan ke depan.
@@ -108,12 +108,12 @@ export default function Welcome() {
                 </section>
 
                 {/* Footer */}
-                <footer className="w-full bg-gray-600 dark:bg-gray-800 text-white">
-                    <div className="max-w-7xl mx-auto py-10 px-6 lg:px-32 flex flex-col md:flex-row justify-between gap-10 md:gap-0 text-sm">
+                <footer className="w-full bg-gray-600 dark:bg-gray-800 text-white ">    
+                    <div className="max-w-7xl mx-auto py-10 px-6 lg:px-32 flex flex-col md:flex-row justify-between gap-10 md:gap-0 text-sm ">
                         {/* Logo */}
                         <div className="flex items-center md:flex-1">
                             <img
-                                src="https://blog-edutore-partner.s3.ap-southeast-1.amazonaws.com/wp-content/uploads/2020/05/09151949/LOGO-UPI.jpg"
+                                src=""
                                 alt="UPI Logo"
                                 className="h-10 mr-3"
                             />
@@ -125,7 +125,7 @@ export default function Welcome() {
 
                         {/* Contact Us */}
                         <div className="md:flex-1">
-                          <h4 className="font-semibold mb-3 border-b border-white w-25 pb-1 text-xl">Contact Us</h4>
+                          <h4 className="font-semibold mb-3 border-b border-white w-30 pb-1 text-xl ">Contact Us</h4>
                             <p className="text-xs leading-relaxed ">
                                 Universitas Pendidikan Indonesia<br />
                                 Jl. Dr. Setiabudhi No. 229 Bandung 40154<br />
@@ -134,19 +134,9 @@ export default function Welcome() {
                             </p>
                         </div>
 
-                        {/* Important Links */}
-                        <div className="md:flex-1">
-                            <h4 className="font-semibold mb-3 border-b border-white w-28 pb-1 text-xl">Important Links</h4>
-                            <ul className="text-xs space-y-1 ">
-                                <li><a href="#" className="hover:underline">Student Portal</a></li>
-                                <li><a href="#" className="hover:underline">Library</a></li>
-                                <li><a href="#" className="hover:underline">UPI Journal</a></li>
-                            </ul>
-                        </div>
-
                         {/* Follow Us */}
                         <div className="md:flex-1">
-                            <h4 className="font-semibold mb-3 border-b border-white w-20 pb-1 text-xl">Follow Us</h4>
+                            <h4 className="font-semibold mb-3 border-b border-white w-25 pb-1 text-xl">Follow Us</h4>
                             <div className="flex space-x-4 text-xl">
                                 {/* Icons */}
                                 <a href="https://twitter.com/upiofficial" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="hover:opacity-80">
