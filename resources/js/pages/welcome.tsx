@@ -63,7 +63,7 @@ export default function Welcome() {
                 {/* Tentang Kami */}
                 <section className="w-full bg-[#f9f9f9] dark:bg-[#111] py-20 px-6 lg:px-32 text-center shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out">
                     <h2 className="text-2xl font-semibold mb-4 lg:text-4xl">Tentang Kami</h2>
-                    <p className="max-w-2xl mx-auto text-[#555] dark:text-[#ccc]">
+                    <p className="max-w-2xl mx-auto text-[#555] :text-[#ccc]">
                         Aplikasi web ini dirancang untuk memudahkan manajemen pekerjaan dan proyek. 
                         Dengan fitur dashboard, penugasan, dan notifikasi, tim dapat bekerja lebih efisien, memantau progres pekerjaan, 
                         serta memastikan semua tugas selesai tepat waktu.
@@ -98,7 +98,7 @@ export default function Welcome() {
                                 Pantau status tiap pekerjaan dan progres tim dalam satu tampilan yang mudah dibaca.
                             </p>
                         </div>
-                        <div className="p-6 border rounded-md dark:border-[#3E3E3A] shadow-md hover:shadow-xl transition-shadow duration-300  ease-in-out">
+                        <div className="p-6 border rounded-md dark:border-[#3E3E3A] shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out">
                             <h3 className="font-semibold mb-2">Laporan & Analisis</h3>
                             <p className="text-[#555] dark:text-[#ccc]">
                                 Dapatkan laporan pekerjaan dan performa tim untuk evaluasi dan perencanaan ke depan.
