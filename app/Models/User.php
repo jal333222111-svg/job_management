@@ -45,4 +45,11 @@ class User extends Authenticatable implements MustVerifyEmail // ✅ jika butuh 
         'is_active' => 'boolean',
         'last_login_at' => 'datetime',
     ];
+    
+
+    public function assignments()
+    {
+        return $this->hasMany(Assignment::class);
+    }
+
 }
