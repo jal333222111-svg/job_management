@@ -22,6 +22,9 @@ interface User {
   id?: number;
   name: string;
   email: string;
+  phone?: string;
+  position?: string;
+  avatar?: File | null;
   password?: string;
   password_confirmation?: string;
   role: "admin" | "manager" | "staff";
@@ -38,6 +41,9 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
   const [formData, setFormData] = useState<User>({
     name: "",
     email: "",
+    phone: "",
+    position: "",
+    avatar: null,
     password: "",
     password_confirmation: "",
     role: "staff",
@@ -50,6 +56,9 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
         id: user.id,
         name: user.name,
         email: user.email,
+        phone: user.phone || "",
+        position: user.position || "",
+        avatar: null,
         password: "",
         password_confirmation: "",
         role: user.role,
@@ -59,6 +68,9 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
       setFormData({
         name: "",
         email: "",
+        phone: "",
+        position: "",
+        avatar: null,
         password: "",
         password_confirmation: "",
         role: "staff",
@@ -71,17 +83,34 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFormData({ ...formData, avatar: e.target.files[0] });
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const data = {
-      name: formData.name,
-      email: formData.email,
-      password: formData.password,
-      password_confirmation: formData.password_confirmation,
-      role: formData.role,
-      is_active: formData.is_active,
-    };
+    const data = new FormData();
+    data.append("name", formData.name);
+    data.append("email", formData.email);
+    data.append("phone", formData.phone || "");
+    data.append("position", formData.position || "");
+    data.append("role", formData.role);
+    data.append("is_active", formData.is_active ? "1" : "0");
+
+    if (formData.password) {
+      data.append("password", formData.password);
+      data.append(
+        "password_confirmation",
+        formData.password_confirmation || ""
+      );
+    }
+
+    if (formData.avatar) {
+      data.append("avatar", formData.avatar);
+    }
 
     const successMsg = user?.id
       ? "User berhasil diperbarui"
@@ -92,7 +121,8 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
       : "Gagal menambahkan user";
 
     if (user?.id) {
-      router.put(`/users/${user.id}`, data, {
+      router.post(`/users/${user.id}`, { _method: "put", ...data }, {
+        forceFormData: true,
         onSuccess: () => {
           toast.success(successMsg);
           closeModal();
@@ -105,6 +135,7 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
       });
     } else {
       router.post("/users", data, {
+        forceFormData: true,
         onSuccess: () => {
           toast.success(successMsg);
           closeModal();
@@ -150,6 +181,34 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
             />
           </div>
 
+          {/* Phone */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Phone</label>
+            <Input
+              type="text"
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+            />
+          </div>
+
+          {/* Position */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Position</label>
+            <Input
+              type="text"
+              name="position"
+              value={formData.position}
+              onChange={handleChange}
+            />
+          </div>
+
+          {/* Avatar */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Avatar</label>
+            <Input type="file" name="avatar" onChange={handleFileChange} />
+          </div>
+
           {/* Password */}
           <div>
             <label className="block text-sm font-medium mb-1">Password</label>
@@ -165,7 +224,9 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
 
           {/* Password Confirmation */}
           <div>
-            <label className="block text-sm font-medium mb-1">Konfirmasi Password</label>
+            <label className="block text-sm font-medium mb-1">
+              Konfirmasi Password
+            </label>
             <Input
               type="password"
               name="password_confirmation"

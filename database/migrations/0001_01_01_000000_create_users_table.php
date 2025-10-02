@@ -15,10 +15,14 @@ return new class extends Migration
             $table->id(); 
             $table->string('name'); 
             $table->string('email')->unique(); 
+            $table->string('phone')->nullable();      // ✅ kontak/no hp
+            $table->string('position')->nullable();   // ✅ jabatan/posisi detail
+            $table->string('avatar')->nullable();     // ✅ foto profil
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->enum('role', ['admin', 'manager', 'staff'])->default('staff');
             $table->boolean('is_active')->default(true); 
+            $table->timestamp('last_login_at')->nullable(); // ✅ tracking login terakhir
             $table->rememberToken();
             $table->timestamps();
         });
@@ -49,4 +53,3 @@ return new class extends Migration
         Schema::dropIfExists('sessions');
     }
 };
-     
