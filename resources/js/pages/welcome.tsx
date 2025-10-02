@@ -47,7 +47,7 @@ export default function Welcome() {
                                     href={register()}
                                     className="rounded-md px-6 py-3 text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-red-600 hover:opacity-90"
                                 >
-                                    Mulai Sekarang
+                                    Registrasi
                                 </Link>
                                 <Link
                                     href={login()}
