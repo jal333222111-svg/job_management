@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('task_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('role')->nullable(); // contoh: "penanggung jawab", "anggota"
+            $table->string('role')->nullable(); // "penanggung jawab", "anggota"
             $table->timestamps();
         });
     }
