@@ -13,8 +13,10 @@ import {
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Users } from 'lucide-react';
+import { BookCheck, BookOpen, BookOpenCheck, CheckCircle, Folder, FolderCheck, FolderCheckIcon, LayoutGrid, Users } from 'lucide-react';
 import AppLogo from './app-logo';
+import tasks from '@/routes/tasks';
+import { TabPanels } from '@headlessui/react';
 
 const mainNavItems: NavItem[] = [
     {
@@ -30,7 +32,22 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Projects',
         href: '/projects', 
-        icon: Users,               
+        icon: Folder,               
+    },
+    {
+        title: 'Pekerjaan',
+        href: '/tasks', 
+        icon: BookOpenCheck,               
+    },
+    {
+        title: 'Penugasan',
+        href: '/assignments', 
+        icon: FolderCheck,               
+    },
+     {
+        title: 'pemantauan',
+        href: '/tracking', 
+        icon: CheckCircle,               
     },
 ];
 

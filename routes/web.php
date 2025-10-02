@@ -5,6 +5,9 @@ use Inertia\Inertia;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\TrackingController;
+
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -33,6 +36,15 @@ Route::middleware(['auth', ])->group(function () {
     Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
     Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+
+
+    // ✅ CRUD Assignments tanpa delete
+    Route::resource('assignments', AssignmentController::class);
+
+    // 📌 Halaman Trackin      
+    Route::get('/tracking', [TrackingController::class, 'index'])->name('tracking.index');
+
+
 });
 
 require __DIR__.'/settings.php';
