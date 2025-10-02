@@ -98,7 +98,7 @@ export default function Welcome() {
                                 Pantau status tiap pekerjaan dan progres tim dalam satu tampilan yang mudah dibaca.
                             </p>
                         </div>
-                        <div className="p-6 border rounded-md dark:border-[#3E3E3A] shadow-md hover:shadow-x0l transition-shadow duration-300  ease-in-out">
+                        <div className="p-6 border rounded-md dark:border-[#3E3E3A] shadow-md hover:shadow-xl transition-shadow duration-300  ease-in-out">
                             <h3 className="font-semibold mb-2">Laporan & Analisis</h3>
                             <p className="text-[#555] dark:text-[#ccc]">
                                 Dapatkan laporan pekerjaan dan performa tim untuk evaluasi dan perencanaan ke depan.
