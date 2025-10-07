@@ -53,10 +53,10 @@
         "lucide-react": "^0.475.0",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
-<<<<<<< HEAD
-=======
+
+
         "recharts": "^3.2.1",
->>>>>>> 49a7f2cabb888ab4cd8a7a0c6882fc90484e6224
+
         "sonner": "^2.0.7",
         "tailwind-merge": "^3.0.1",
         "tailwindcss": "^4.0.0",
