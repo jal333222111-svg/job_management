@@ -91,13 +91,14 @@ export default function Welcome() {
                             <p className="text-[#555] dark:text-[#ccc]">
                                 Menetapkan pekerjaan ke karyawan dan menerima notifikasi saat ada update atau deadline mendekat.
                             </p>
-                        </div>
+                        </div>                                     
                         <div className="p-6 border rounded-md dark:border-[#3E3E3A] shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out">
                             <h3 className="font-semibold mb-2">Progres Pekerjaan</h3>
                             <p className="text-[#555] dark:text-[#ccc]">
                                 Pantau status tiap pekerjaan dan progres tim dalam satu tampilan yang mudah dibaca.
                             </p>
                         </div>
+                        <div className="flex justify-end"></div>
                         <div className="p-6 border rounded-md dark:border-[#3E3E3A] shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out">
                             <h3 className="font-semibold mb-2">Laporan & Analisis</h3>
                             <p className="text-[#555] dark:text-[#ccc]">

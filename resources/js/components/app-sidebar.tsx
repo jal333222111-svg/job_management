@@ -13,7 +13,7 @@ import {
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookCheck, BookOpen, BookOpenCheck, CheckCircle, Folder, FolderCheck, FolderCheckIcon, LayoutGrid, Users } from 'lucide-react';
+import { BookCheck, BookOpen, BookOpenCheck, Check, CheckCircle, Folder, FolderCheck, FolderCheckIcon, LayoutGrid, ReceiptPoundSterling, Users } from 'lucide-react';
 import AppLogo from './app-logo';
 import tasks from '@/routes/tasks';
 import { TabPanels } from '@headlessui/react';
@@ -49,6 +49,11 @@ const mainNavItems: NavItem[] = [
         href: '/tracking', 
         icon: CheckCircle,               
     },
+    {
+        title: 'Laporan',
+        href: '/reports', 
+        icon: ReceiptPoundSterling,               
+    }, 
 ];
 
 const footerNavItems: NavItem[] = [

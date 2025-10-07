@@ -50,6 +50,7 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
     is_active: true,
   });
 
+  /** 🔁 Update form saat user berubah (edit vs tambah) */
   useEffect(() => {
     if (user) {
       setFormData({
@@ -65,30 +66,26 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
         is_active: user.is_active,
       });
     } else {
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        position: "",
-        avatar: null,
-        password: "",
-        password_confirmation: "",
-        role: "staff",
-        is_active: true,
-      });
+      resetForm();
     }
   }, [user]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  /** 🧹 Reset form */
+  const resetForm = () => {
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      position: "",
+      avatar: null,
+      password: "",
+      password_confirmation: "",
+      role: "staff",
+      is_active: true,
+    });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData({ ...formData, avatar: e.target.files[0] });
-    }
-  };
-
+  /** 📤 Submit form */
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -102,10 +99,7 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
 
     if (formData.password) {
       data.append("password", formData.password);
-      data.append(
-        "password_confirmation",
-        formData.password_confirmation || ""
-      );
+      data.append("password_confirmation", formData.password_confirmation || "");
     }
 
     if (formData.avatar) {
@@ -121,11 +115,14 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
       : "Gagal menambahkan user";
 
     if (user?.id) {
-      router.post(`/users/${user.id}`, { _method: "put", ...data }, {
+      // 📝 Update user
+      data.append("_method", "put");
+      router.post(`/users/${user.id}`, data, {
         forceFormData: true,
         onSuccess: () => {
           toast.success(successMsg);
           closeModal();
+          resetForm();
           router.reload();
         },
         onError: (errors) => {
@@ -134,11 +131,13 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
         },
       });
     } else {
+      // ➕ Tambah user
       router.post("/users", data, {
         forceFormData: true,
         onSuccess: () => {
           toast.success(successMsg);
           closeModal();
+          resetForm();
           router.reload();
         },
         onError: (errors) => {
@@ -149,8 +148,25 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
     }
   };
 
+  /** 🧩 Input change handlers */
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setFormData({ ...formData, avatar: e.target.files[0] });
+    }
+  };
+
+  /** 🧼 Reset form saat modal ditutup */
+  const handleClose = () => {
+    closeModal();
+    resetForm();
+  };
+
   return (
-    <Dialog open={isOpen} onOpenChange={closeModal}>
+    <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
           <DialogTitle>{user ? "Edit User" : "Tambah User"}</DialogTitle>
@@ -271,9 +287,9 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
             </label>
           </div>
 
-          {/* Tombol */}
+          {/* Tombol Aksi */}
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={closeModal}>
+            <Button type="button" variant="outline" onClick={handleClose}>
               Batal
             </Button>
             <Button type="submit">{user ? "Ubah" : "Simpan"}</Button>
