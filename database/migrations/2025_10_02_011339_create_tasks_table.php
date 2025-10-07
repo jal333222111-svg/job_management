@@ -19,7 +19,6 @@ return new class extends Migration
             $table->enum('priority', ['rendah', 'sedang', 'tinggi'])->default('sedang'); // prioritas
             $table->enum('status', ['baru', 'proses', 'selesai'])->default('baru'); // status
             $table->foreignId('assigned_to')->nullable()->constrained('users')->nullOnDelete(); // penanggung jawab
-            $table->foreignId('project_id')->nullable()->constrained('projects')->cascadeOnDelete(); // pekerjaan terkait project
             $table->timestamps(); // created_at, updated_at
 
         });

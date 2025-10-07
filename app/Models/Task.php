@@ -16,7 +16,6 @@ class Task extends Model
         'priority',
         'status',
         'assigned_to', // FK ke user
-        'project_id',  // FK ke project
     ];
 
     public function user()
@@ -24,10 +23,7 @@ class Task extends Model
         return $this->belongsTo(User::class, 'assigned_to');
     }
 
-    public function project()
-    {
-        return $this->belongsTo(Project::class);
-    }
+
 
     public function assignments()
     {

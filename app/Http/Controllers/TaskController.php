@@ -13,7 +13,7 @@ class TaskController extends Controller
     public function index()
     {
         return Inertia::render('Tasks/index', [ // pastikan folder: resources/js/Pages/Tasks/Index.tsx
-            'tasks' => Task::with(['user', 'project'])->latest()->paginate(10),
+            'tasks' => Task::with(['user'])->latest()->paginate(10),
             'users' => User::select('id', 'name')->get(), // untuk dropdown penanggung jawab
         ]);
     }
@@ -27,8 +27,7 @@ class TaskController extends Controller
             'deadline'    => 'nullable|date',
             'priority'    => 'required|in:rendah,sedang,tinggi',
             'status'      => 'required|in:baru,proses,selesai',
-            'assigned_to' => 'nullable|exists:users,id',
-            'project_id'  => 'nullable|exists:projects,id',
+            'assigned_to' => 'nullable|exists:users,id'
         ]);
 
         Task::create($validated);
@@ -46,7 +45,6 @@ class TaskController extends Controller
             'priority'    => 'required|in:rendah,sedang,tinggi',
             'status'      => 'required|in:baru,proses,selesai',
             'assigned_to' => 'nullable|exists:users,id',
-            'project_id'  => 'nullable|exists:projects,id',
         ]);
 
         $task->update($validated);
