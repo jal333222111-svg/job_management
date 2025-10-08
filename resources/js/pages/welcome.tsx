@@ -10,10 +10,13 @@ export default function Welcome() {
             <Head title="Welcome">
                 <link rel="preconnect" href="https://fonts.bunny.net" />
                 <link
+                    
                     href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600"
                     rel="stylesheet"
                 />
             </Head>
+            {/* AOS */}
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 
             <div className="flex flex-col items-center bg-[#FDFDFC] text-[#1b1b18] dark:bg-[#0a0a0a] dark:text-[#EDEDEC] w-full">
 
@@ -80,30 +83,35 @@ export default function Welcome() {
                                 Menampilkan ringkasan proyek, pekerjaan aktif, dan progres tim secara realtime.
                             </p>
                         </div>
+                    
                         <div className="p-6 border rounded-md dark:border-[#3E3E3A] shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out">
                             <h3 className="font-semibold mb-2">Manajemen Pekerjaan</h3>
                             <p className="text-[#555] dark:text-[#ccc]">
                                 Input, update, dan pantau semua pekerjaan serta tugas tim dengan mudah.
                             </p>
                         </div>
+                       
                         <div className="p-6 border rounded-md dark:border-[#3E3E3A] shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out">
                             <h3 className="font-semibold mb-2">Penugasan & Notifikasi</h3>
                             <p className="text-[#555] dark:text-[#ccc]">
                                 Menetapkan pekerjaan ke karyawan dan menerima notifikasi saat ada update atau deadline mendekat.
                             </p>
-                        </div>                                     
+                        </div>               
+                                         
                         <div className="p-6 border rounded-md dark:border-[#3E3E3A] shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out">
                             <h3 className="font-semibold mb-2">Progres Pekerjaan</h3>
                             <p className="text-[#555] dark:text-[#ccc]">
                                 Pantau status tiap pekerjaan dan progres tim dalam satu tampilan yang mudah dibaca.
                             </p>
-                        </div>
+                        </div>                   
+
                         <div className="flex justify-end"></div>
                         <div className="p-6 border rounded-md dark:border-[#3E3E3A] shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out">
                             <h3 className="font-semibold mb-2">Laporan & Analisis</h3>
                             <p className="text-[#555] dark:text-[#ccc]">
                                 Dapatkan laporan pekerjaan dan performa tim untuk evaluasi dan perencanaan ke depan.
                             </p>
+                            
                         </div>
                     </div>
                 </section>
