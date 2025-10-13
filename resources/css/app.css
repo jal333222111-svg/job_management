@@ -9,14 +9,7 @@
 
 @theme {
 
-    /* AOS */
-      <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-
-        <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-  <script>
-    AOS.init();
-  </script>
-  
+   
     --font-sans:
         'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
