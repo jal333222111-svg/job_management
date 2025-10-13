@@ -1,3 +1,4 @@
+import React, { useState } from 'react'; // tambah useState
 import AuthenticatedSessionController from '@/actions/App/Http/Controllers/Auth/AuthenticatedSessionController';
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
@@ -17,20 +18,28 @@ interface LoginProps {
 }
 
 export default function Login({ status, canResetPassword }: LoginProps) {
+    // State untuk toggle password visibility
+    const [showPassword, setShowPassword] = useState(false);
+
     return (
         <AuthLayout
+        
             title="Masuk ke akun Anda"
             description="Masukkan email dan kata sandi Anda untuk masuk"
         >
+            
             <Head title="Masuk" />
 
-            <Form
+            
+            <Form            
+        
                 {...AuthenticatedSessionController.store.form()}
                 resetOnSuccess={['password']}
                 className="flex flex-col gap-6"
             >
                 {({ processing, errors }) => (
                     <>
+                    
                         <div className="grid gap-6">
                             <div className="grid gap-2">
                                 <Label htmlFor="email">Alamat Email</Label>
@@ -60,15 +69,28 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                         </TextLink>
                                     )}
                                 </div>
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    name="password"
-                                    required
-                                    tabIndex={2}
-                                    autoComplete="current-password"
-                                    placeholder="Kata sandi"
-                                />
+                                <div className="relative">
+                                    <Input
+                                    
+                                        id="password"
+                                        type={showPassword ? 'text' : 'password'} // toggle type
+                                        name="password"
+                                        required
+                                        tabIndex={2}
+                                        autoComplete="current-password"
+                                        placeholder="Kata sandi"
+                                    />
+                                    {/* Tombol toggle show/hide */}
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-500 hover:text-gray-700 focus:outline-none"
+                                        tabIndex={-1}
+                                        aria-label={showPassword ? 'Sembunyikan kata sandi' : 'Tampilkan kata sandi'}
+                                    >
+                                        {showPassword ? 'Sembunyikan' : 'Tampilkan'}
+                                    </button>
+                                </div>
                                 <InputError message={errors.password} />
                             </div>
 
