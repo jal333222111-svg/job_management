@@ -1,5 +1,4 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,9 +11,13 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
+            
+            $table->foreignId('owner_id')->nullable()->constrained('users')->nullOnDelete();
+
             $table->date('deadline')->nullable();
             $table->enum('tingkatan', ['mudah', 'sedang', 'susah'])->default('sedang');
-            $table->enum('status', ['belum di kerjakan','proses','selesai'])->default('belum di kerjakan');
+            $table->enum('status', ['belum di kerjakan', 'proses', 'selesai'])->default('belum di kerjakan');
+            $table->string('file_path')->nullable();
             $table->timestamps();
         });
     }

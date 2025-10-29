@@ -41,3 +41,12 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+declare module "ziggy-js/dist/vue" {
+  export default function route(
+    name?: string,
+    params?: any,
+    absolute?: boolean,
+    config?: any
+  ): string;
+}

@@ -4,59 +4,69 @@ namespace App\Http\Controllers;
 
 use App\Models\Task;
 use App\Models\User;
+use App\Models\Project;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class TaskController extends Controller
 {
-    // 📌 List data pekerjaan
+    /** 📋 Daftar tugas */
     public function index()
     {
-        return Inertia::render('Tasks/index', [ // pastikan folder: resources/js/Pages/Tasks/Index.tsx
-            'tasks' => Task::with(['user'])->latest()->paginate(10),
-            'users' => User::select('id', 'name')->get(), // untuk dropdown penanggung jawab
+        return Inertia::render('Tasks/index', [
+            'tasks' => Task::with(['user', 'project'])
+                ->latest()
+                ->paginate(10),
+
+            'users' => User::select('id', 'name')->get(),
+
+            // 🔧 hanya tampilkan project yang belum selesai
+            'projects' => Project::select('id', 'title')
+                ->where('status', '!=', 'Selesai') // atau 'selesai' sesuai isi databasenya
+                ->get(),
         ]);
     }
 
-    // 📌 Simpan pekerjaan baru
+    /** ➕ Tambah tugas */
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'project_id'  => 'nullable|exists:projects,id',
+            'user_id'     => 'nullable|exists:users,id',
             'title'       => 'required|string|max:255',
             'description' => 'nullable|string',
-            'deadline'    => 'nullable|date',
-            'priority'    => 'required|in:rendah,sedang,tinggi',
             'status'      => 'required|in:baru,proses,selesai',
-            'assigned_to' => 'nullable|exists:users,id'
         ]);
 
         Task::create($validated);
 
-        return redirect()->route('tasks.index')->with('success', 'Pekerjaan berhasil ditambahkan');
+        return redirect()->route('tasks.index')
+            ->with('success', 'Tugas berhasil ditambahkan');
     }
 
-    // 📌 Update pekerjaan
+    /** ✏️ Update tugas */
     public function update(Request $request, Task $task)
     {
         $validated = $request->validate([
+            'project_id'  => 'nullable|exists:projects,id',
+            'user_id'     => 'nullable|exists:users,id',
             'title'       => 'required|string|max:255',
             'description' => 'nullable|string',
-            'deadline'    => 'nullable|date',
-            'priority'    => 'required|in:rendah,sedang,tinggi',
             'status'      => 'required|in:baru,proses,selesai',
-            'assigned_to' => 'nullable|exists:users,id',
         ]);
 
         $task->update($validated);
 
-        return redirect()->route('tasks.index')->with('success', 'Pekerjaan berhasil diperbarui');
+        return redirect()->route('tasks.index')
+            ->with('success', 'Tugas berhasil diperbarui');
     }
 
-    // 📌 Hapus pekerjaan
+    /** ❌ Hapus tugas */
     public function destroy(Task $task)
     {
         $task->delete();
 
-        return redirect()->route('tasks.index')->with('success', 'Pekerjaan berhasil dihapus');
+        return redirect()->route('tasks.index')
+            ->with('success', 'Tugas berhasil dihapus');
     }
 }

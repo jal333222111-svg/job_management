@@ -41,7 +41,18 @@
 
         @viteReactRefresh
         @vite(['resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
+
+        {{-- Scripts --}}
+        @routes
+        {{-- @vite(['resources/js/app.tsx']) --}}
+        {{-- @vite(['resources/css/app.css', 'resources/js/app.tsx']) --}}
+        {{-- @vite(['resources/css/app.css']) --}}  
+        {{-- @vite(['resources/css/app.css', 'resources/js/app.tsx']) --}}
+        
+        {{-- Inertia --}}   
         @inertiaHead
+        
+
     </head>
     <body class="font-sans antialiased">
         @inertia

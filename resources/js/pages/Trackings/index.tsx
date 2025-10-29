@@ -1,7 +1,19 @@
 import { useState } from "react";
 import AppLayout from "@/layouts/app-layout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { type BreadcrumbItem } from "@/types";
@@ -11,8 +23,6 @@ type Task = {
   id: number;
   title: string;
   description?: string;
-  deadline?: string;
-  priority: "rendah" | "sedang" | "tinggi";
   status: "baru" | "proses" | "selesai";
   user?: { id: number; name: string };
   project?: { id: number; title: string };
@@ -25,13 +35,17 @@ export default function Tracking({ tasks }: { tasks: Task[] }) {
     { title: "Tracking", href: "/tracking" },
   ];
 
+  // 🔍 Filter status tugas
   const filteredTasks =
     filter === "all" ? tasks : tasks.filter((t) => t.status === filter);
 
+  // 🎨 Badge status
   const getStatusBadge = (status: Task["status"]) => {
     switch (status) {
       case "baru":
-        return <Badge className="bg-gray-300 text-gray-700">Baru</Badge>;
+        return (
+          <Badge className="bg-gray-400 text-white font-medium">Baru</Badge>
+        );
       case "proses":
         return (
           <Badge className="bg-blue-500 text-white flex items-center gap-1">
@@ -47,6 +61,7 @@ export default function Tracking({ tasks }: { tasks: Task[] }) {
     }
   };
 
+  // 📈 Persentase progress berdasarkan status
   const getProgress = (status: Task["status"]) => {
     switch (status) {
       case "baru":
@@ -62,71 +77,53 @@ export default function Tracking({ tasks }: { tasks: Task[] }) {
     <AppLayout breadcrumbs={breadcrumbs}>
       <div className="px-8 py-4">
         <Card className="shadow-lg border-0">
+          {/* Header Card */}
           <CardHeader className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-t-xl">
             <CardTitle className="text-white font-semibold flex items-center gap-2">
               <Clock className="w-5 h-5" /> Tracking Pekerjaan
             </CardTitle>
           </CardHeader>
+
           <CardContent>
-            <div className="flex gap-3 mb-4">
-              <button
-                onClick={() => setFilter("all")}
-                className={`px-4 py-2 rounded-lg ${
-                  filter === "all"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 text-gray-600"
-                }`}
-              >
-                Semua
-              </button>
-              <button
-                onClick={() => setFilter("baru")}
-                className={`px-4 py-2 rounded-lg ${
-                  filter === "baru"
-                    ? "bg-gray-800 text-white"
-                    : "bg-gray-200 text-gray-600"
-                }`}
-              >
-                Baru
-              </button>
-              <button
-                onClick={() => setFilter("proses")}
-                className={`px-4 py-2 rounded-lg ${
-                  filter === "proses"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 text-gray-600"
-                }`}
-              >
-                Proses
-              </button>
-              <button
-                onClick={() => setFilter("selesai")}
-                className={`px-4 py-2 rounded-lg ${
-                  filter === "selesai"
-                    ? "bg-green-600 text-white"
-                    : "bg-gray-200 text-gray-600"
-                }`}
-              >
-                Selesai
-              </button>
+            {/* Filter Status */}
+            <div className="flex gap-3 mb-4 flex-wrap">
+              {[
+                { key: "all", label: "Semua", color: "blue" },
+                { key: "baru", label: "Baru", color: "blue" },
+                { key: "proses", label: "Proses", color: "blue" },
+                { key: "selesai", label: "Selesai", color: "blue" },
+              ].map(({ key, label, color }) => (
+                <button
+                  key={key}
+                  onClick={() => setFilter(key)}
+                  className={`px-4 py-2 rounded-lg transition-all duration-150 ${
+                    filter === key
+                      ? `bg-${color}-600 text-white`
+                      : "bg-gray-200 text-gray-600 hover:bg-gray-300"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
 
+            {/* Tabel Tracking */}
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Judul</TableHead>
                   <TableHead>Proyek</TableHead>
                   <TableHead>Penanggung Jawab</TableHead>
-                  <TableHead>Deadline</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Progress</TableHead>
                 </TableRow>
               </TableHeader>
+
               <TableBody>
                 {filteredTasks.length === 0 ? (
                   <TableRow>
                     <TableCell
-                      colSpan={6}
+                      colSpan={5}
                       className="text-center py-6 text-gray-500"
                     >
                       Tidak ada data tracking
@@ -134,15 +131,15 @@ export default function Tracking({ tasks }: { tasks: Task[] }) {
                   </TableRow>
                 ) : (
                   filteredTasks.map((task) => (
-                    <TableRow key={task.id} className="hover:bg-gray-50">
-                      <TableCell>{task.title}</TableCell>
-                      <TableCell>{task.project?.title || "-"}</TableCell>
-                      <TableCell>{task.user?.name || "-"}</TableCell>
-                      <TableCell>
-                        {task.deadline
-                          ? new Date(task.deadline).toLocaleDateString("id-ID")
-                          : "-"}
+                    <TableRow
+                      key={task.id}
+                      className="hover:bg-gray-50 transition"
+                    >
+                      <TableCell className="font-medium text-gray-800">
+                        {task.title}
                       </TableCell>
+                      <TableCell>{task.project?.title || "-"}</TableCell>
+                      <TableCell>{task.user?.name || "Belum ditugaskan"}</TableCell>
                       <TableCell>{getStatusBadge(task.status)}</TableCell>
                       <TableCell>
                         <Progress value={getProgress(task.status)} />
