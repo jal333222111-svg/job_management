@@ -85,6 +85,7 @@ export default function Register() {
                                     name="password_confirmation"
                                     placeholder="Ulangi kata sandi"
                                 />
+
                                 <InputError
                                     message={errors.password_confirmation}
                                 />

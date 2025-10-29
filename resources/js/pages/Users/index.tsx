@@ -32,7 +32,7 @@ type Props = {
 };
 
 export default function UserIndex() {
-  const { users } = usePage().props as Props;
+  const { users } = usePage().props as unknown as Props;
 
   // state untuk modal & pencarian
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -188,6 +188,7 @@ export default function UserIndex() {
           isOpen={isModalOpen}
           closeModal={() => setIsModalOpen(false)}
           user={selectedUser}
+          
         />
       </div>
     </AppLayout>
