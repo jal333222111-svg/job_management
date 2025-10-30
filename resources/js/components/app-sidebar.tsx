@@ -25,11 +25,6 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
-        title: 'Users',
-        href: 'users', 
-        icon: Users,               
-    },
-    {
         title: 'Projects',
         href: '/projects', 
         icon: Folder,               
@@ -38,11 +33,6 @@ const mainNavItems: NavItem[] = [
         title: 'Pekerjaan',
         href: '/tasks', 
         icon: BookOpenCheck,               
-    },
-    {
-        title: 'Penugasan',
-        href: '/assignments', 
-        icon: FolderCheck,               
     },
      {
         title: 'pemantauan',
@@ -58,14 +48,9 @@ const mainNavItems: NavItem[] = [
 
 const footerNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
+        title: ' Data Users',
+        href: 'users', 
+        icon: Users,               
     },
 ];
 

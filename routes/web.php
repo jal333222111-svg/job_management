@@ -8,6 +8,7 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\TrackingController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ManageJobController;
 
 Route::get('/', function () {
     return Inertia::render('welcome');
@@ -26,14 +27,15 @@ Route::middleware(['auth'])->group(function () {
     //CRUD Tasks
     Route::resource('tasks', TaskController::class)->except(['show', 'create', 'edit']);
 
-    //CRUD Assignments
-    Route::resource('assignments', AssignmentController::class)->except(['show', 'create', 'edit']);
-
     //Tracking
     Route::get('/tracking', [TrackingController::class, 'index'])->name('tracking.index');
 
     //Reports
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+
+    //Manage Job (Custom Route)
+    Route::get('/projects/{id}/manage', [ManageJobController::class, 'show'])->name('projects.manage');
+
 });
 
 require __DIR__.'/settings.php';

@@ -14,21 +14,24 @@ import {
 } from "@/components/ui/table";
 import { ClipboardList, Pencil, Plus, Trash2 } from "lucide-react";
 import TaskFormModal from "@/components/TaskFormModal";
+import { toast } from "sonner";
 
 type Task = {
   id: number;
   title: string;
   description?: string;
-  deadline?: string | null;
-  priority: "rendah" | "sedang" | "tinggi";
-  status: "baru" | "proses" | "selesai";
+  status: "belum dikerjakan" | "proses" | "selesai";
   user?: { id: number; name: string } | null;
+  project?: { id: number; title: string } | null;
 };
 
 export default function TaskIndex() {
-  const { tasks, users } = usePage().props as {
+
+  
+  const { tasks, users, projects } = usePage().props as {
     tasks: { data: Task[] };
     users: { id: number; name: string }[];
+    projects: { id: number; title: string }[];
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -40,7 +43,10 @@ export default function TaskIndex() {
 
   const handleDelete = (id: number) => {
     if (confirm("Yakin ingin menghapus pekerjaan ini?")) {
-      router.delete(`/tasks/${id}`);
+      router.delete(`/tasks/${id}`, {
+        onSuccess: () => toast.success("Pekerjaan berhasil dihapus"),
+        onError: () => toast.error("Gagal menghapus pekerjaan"),
+      });
     }
   };
 
@@ -83,8 +89,7 @@ export default function TaskIndex() {
                 <TableRow className="bg-gray-100">
                   <TableHead>Judul</TableHead>
                   <TableHead>Deskripsi</TableHead>
-                  <TableHead>Deadline</TableHead>
-                  <TableHead>Prioritas</TableHead>
+                  <TableHead>Project</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Penanggung Jawab</TableHead>
                   <TableHead className="text-center">Aksi</TableHead>
@@ -95,7 +100,7 @@ export default function TaskIndex() {
                 {tasks.data.length === 0 ? (
                   <TableRow>
                     <TableCell
-                      colSpan={7}
+                      colSpan={6}
                       className="text-center text-gray-500 py-6"
                     >
                       Belum ada pekerjaan
@@ -109,10 +114,10 @@ export default function TaskIndex() {
                     >
                       <TableCell>{t.title}</TableCell>
                       <TableCell>{t.description || "-"}</TableCell>
-                      <TableCell>{t.deadline || "-"}</TableCell>
-                      <TableCell>{t.priority}</TableCell>
-                      <TableCell>{t.status}</TableCell>
+                      <TableCell>{t.project?.title || "-"}</TableCell>
+                      <TableCell className="capitalize">{t.status}</TableCell>
                       <TableCell>{t.user?.name || "-"}</TableCell>
+
                       <TableCell className="flex gap-2 justify-center">
                         <Button
                           size="sm"
@@ -149,6 +154,7 @@ export default function TaskIndex() {
           closeModal={() => setIsModalOpen(false)}
           task={selectedTask}
           users={users}
+          projects={projects}
         />
       </div>
     </AppLayout>

@@ -46,10 +46,4 @@ class User extends Authenticatable implements MustVerifyEmail // ✅ jika butuh 
         'last_login_at' => 'datetime',
     ];
     
-
-    public function assignments()
-    {
-        return $this->hasMany(Assignment::class);
-    }
-
 }

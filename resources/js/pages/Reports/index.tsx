@@ -1,114 +1,110 @@
+import { usePage } from "@inertiajs/react";
+import { FileText } from "lucide-react";
 import AppLayout from "@/layouts/app-layout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from "recharts";
 
-type Task = {
+type User = { id: number; name: string };
+
+type Job = {
   id: number;
   title: string;
-  deadline: string | null;
-  priority: string;
   status: string;
+  due_date?: string | null;
+  officer?: User;
 };
 
-type Props = {
-  statusSummary: Record<string, number>;
-  prioritySummary: Record<string, number>;
-  upcomingDeadlines: Task[];
+type Project = {
+  id: number;
+  title: string;
+  tingkatan: "mudah" | "sedang" | "susah";
+  status: "belum di kerjakan" | "proses" | "selesai";
+  start_date?: string | null;
+  end_date?: string | null;
+  jobs?: Job[];
 };
 
-export default function index({ statusSummary, prioritySummary, upcomingDeadlines }: Props) {
-  const COLORS = ["#6366F1", "#FACC15", "#22C55E", "#EF4444", "#A855F7"];
-
-  const statusData = Object.entries(statusSummary).map(([name, value]) => ({
-    name,
-    value,
-  }));
-
-  const priorityData = Object.entries(prioritySummary).map(([name, value]) => ({
-    name,
-    value,
-  }));
+export default function ReportPrint() {
+  const { projects } = usePage().props as { projects: { data: Project[] } };
 
   return (
-    <AppLayout breadcrumbs={[{ title: "Laporan", href: "/reports" }]}>
-      <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Grafik Status */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Ringkasan Status</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={250}>
-              <PieChart>
-                <Pie data={statusData} cx="50%" cy="50%" labelLine={false} label outerRadius={80} dataKey="value">
-                  {statusData.map((_, index) => (
-                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+    <AppLayout breadcrumbs={[{ title: "Cetak Laporan", href: "/reports/print" }]}>      
+      <div className="p-6 space-y-6 print:p-0">
+        {/* Header */}
+        <div className="flex justify-between items-center print:block print:text-center">
+          <h1 className="text-xl font-bold flex items-center gap-2 print:block print:mb-4">
+            <FileText className="w-6 h-6 text-blue-600 print:hidden" />
+            Laporan Project dan Pekerjaan
+          </h1>
 
-        {/* Grafik Prioritas */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Ringkasan Prioritas</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={250}>
-              <PieChart>
-                <Pie data={priorityData} cx="50%" cy="50%" labelLine={false} label outerRadius={80} dataKey="value">
-                  {priorityData.map((_, index) => (
-                    <Cell key={index} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+          {/* Tombol Print */}
+          <button
+            onClick={() => window.print()}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 print:hidden"
+          >
+            Print
+          </button>
+        </div>
 
-        {/* Deadline Terdekat */}
-        <Card className="md:col-span-2">
-          <CardHeader>
-            <CardTitle>Deadline Terdekat (7 Hari ke Depan)</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Judul</TableHead>
-                  <TableHead>Deadline</TableHead>
-                  <TableHead>Prioritas</TableHead>
-                  <TableHead>Status</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {upcomingDeadlines.length === 0 ? (
-                  <TableRow>
-                    <TableCell colSpan={4} className="text-center text-gray-500 py-4">
-                      Tidak ada deadline dalam 7 hari ke depan
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  upcomingDeadlines.map((task) => (
-                    <TableRow key={task.id}>
-                      <TableCell>{task.title}</TableCell>
-                      <TableCell>{task.deadline}</TableCell>
-                      <TableCell>{task.priority}</TableCell>
-                      <TableCell>{task.status}</TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+        {/* Tabel */}
+        <div className="bg-white shadow-md rounded-xl p-4 overflow-x-auto print:shadow-none print:border-0 print:p-0">
+          <table className="w-full border-collapse text-sm">
+            <thead>
+              <tr className="bg-gray-100 print:bg-gray-200 text-left">
+                <th className="p-2 border text-center w-10">No</th>
+                <th className="p-2 border">Judul Project</th>
+                <th className="p-2 border text-center">Tingkatan</th>
+                <th className="p-2 border text-center">Status Project</th>
+                <th className="p-2 border text-center">Tanggal Mulai</th>
+                <th className="p-2 border text-center">Tanggal Selesai</th>
+                <th className="p-2 border">Nama Pekerjaan</th>
+                <th className="p-2 border text-center">Status Pekerjaan</th>
+                <th className="p-2 border text-center">Dikerjakan Oleh</th>
+              </tr>
+            </thead>
+            <tbody>
+              {projects.data.length > 0 ? (
+                projects.data.map((project, i) => {
+                  const jobCount = project.jobs?.length || 0;
+
+                  if (jobCount === 0) {
+                    return (
+                      <tr key={project.id}>
+                        <td className="p-2 border text-center">{i + 1}</td>
+                        <td className="p-2 border">{project.title}</td>
+                        <td className="p-2 border text-center capitalize">{project.tingkatan}</td>
+                        <td className="p-2 border text-center">{project.status}</td>
+                        <td className="p-2 border text-center">{project.start_date || "-"}</td>
+                        <td className="p-2 border text-center">{project.end_date || "-"}</td>
+                        <td className="p-2 border italic text-gray-400 text-center" colSpan={3}>Tidak ada pekerjaan</td>
+                      </tr>
+                    );
+                  }
+
+                  return project.jobs?.map((job, jIndex) => (
+                    <tr key={`${project.id}-${job.id}`}>
+                      {jIndex === 0 && (
+                        <>
+                          <td className="p-2 border text-center" rowSpan={jobCount}>{i + 1}</td>
+                          <td className="p-2 border" rowSpan={jobCount}>{project.title}</td>
+                          <td className="p-2 border text-center capitalize" rowSpan={jobCount}>{project.tingkatan}</td>
+                          <td className="p-2 border text-center" rowSpan={jobCount}>{project.status}</td>
+                          <td className="p-2 border text-center" rowSpan={jobCount}>{project.start_date || "-"}</td>
+                          <td className="p-2 border text-center" rowSpan={jobCount}>{project.end_date || "-"}</td>
+                        </>
+                      )}
+                      <td className="p-2 border">{job.title}</td>
+                      <td className="p-2 border text-center">{job.status}</td>
+                      <td className="p-2 border text-center">{job.officer?.name || "-"}</td>
+                    </tr>
+                  ));
+                })
+              ) : (
+                <tr>
+                  <td colSpan={9} className="text-center text-gray-500 py-4 border">Tidak ada data project</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </AppLayout>
   );

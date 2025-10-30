@@ -22,11 +22,9 @@ type Task = {
   id?: number;
   title: string;
   description?: string;
-  deadline?: string | null;
-  priority: "rendah" | "sedang" | "tinggi";
   status: "baru" | "proses" | "selesai";
-  assigned_to?: number | null;
-  project_id?: number | null;
+  user_id?: number | null;
+  project_id: number | null;
 };
 
 interface Props {
@@ -34,16 +32,21 @@ interface Props {
   closeModal: () => void;
   task?: Task | null;
   users: { id: number; name: string }[];
+  projects: { id: number; title: string }[];
 }
 
-export default function TaskFormModal({ isOpen, closeModal, task, users }: Props) {
+export default function TaskFormModal({
+  isOpen,
+  closeModal,
+  task,
+  users,
+  projects,
+}: Props) {
   const [formData, setFormData] = useState<Task>({
     title: "",
     description: "",
-    deadline: "",
-    priority: "sedang",
     status: "baru",
-    assigned_to: null,
+    user_id: null,
     project_id: null,
   });
 
@@ -53,34 +56,36 @@ export default function TaskFormModal({ isOpen, closeModal, task, users }: Props
         id: task.id,
         title: task.title,
         description: task.description || "",
-        deadline: task.deadline || "",
-        priority: task.priority,
         status: task.status,
-        assigned_to: task.assigned_to ?? null,
+        user_id: task.user_id ?? null,
         project_id: task.project_id ?? null,
       });
     } else {
       setFormData({
         title: "",
         description: "",
-        deadline: "",
-        priority: "sedang",
         status: "baru",
-        assigned_to: null,
+        user_id: null,
         project_id: null,
       });
     }
   }, [task]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const successMsg = task?.id ? "Pekerjaan berhasil diperbarui" : "Pekerjaan berhasil ditambahkan";
-    const errorMsg = task?.id ? "Gagal memperbarui pekerjaan" : "Gagal menambahkan pekerjaan";
+    const successMsg = task?.id
+      ? "Tugas berhasil diperbarui"
+      : "Tugas berhasil ditambahkan";
+    const errorMsg = task?.id
+      ? "Gagal memperbarui tugas"
+      : "Gagal menambahkan tugas";
 
     if (task?.id) {
       router.put(`/tasks/${task.id}`, formData, {
@@ -107,10 +112,11 @@ export default function TaskFormModal({ isOpen, closeModal, task, users }: Props
     <Dialog open={isOpen} onOpenChange={closeModal}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>{task ? "Edit Pekerjaan" : "Tambah Pekerjaan"}</DialogTitle>
+          <DialogTitle>{task ? "Edit Tugas" : "Tambah Tugas"}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Judul */}
           <div>
             <label className="block text-sm font-medium mb-1">Judul</label>
             <Input
@@ -122,6 +128,7 @@ export default function TaskFormModal({ isOpen, closeModal, task, users }: Props
             />
           </div>
 
+          {/* Deskripsi */}
           <div>
             <label className="block text-sm font-medium mb-1">Deskripsi</label>
             <textarea
@@ -132,38 +139,70 @@ export default function TaskFormModal({ isOpen, closeModal, task, users }: Props
             />
           </div>
 
+          {/* Project */}
           <div>
-            <label className="block text-sm font-medium mb-1">Deadline</label>
-            <Input
-              type="date"
-              name="deadline"
-              value={formData.deadline || ""}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Prioritas</label>
+            <label className="block text-sm font-medium mb-1">Project</label>
             <Select
-              value={formData.priority}
-              onValueChange={(val) => setFormData((prev) => ({ ...prev, priority: val as Task["priority"] }))}
+              value={formData.project_id ? String(formData.project_id) : ""}
+              onValueChange={(val) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  project_id: Number(val),
+                }))
+              }
             >
-              <SelectTrigger><SelectValue placeholder="Pilih Prioritas" /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue placeholder="Pilih Project" />
+              </SelectTrigger>
               <SelectContent>
-                <SelectItem value="rendah">Rendah</SelectItem>
-                <SelectItem value="sedang">Sedang</SelectItem>
-                <SelectItem value="tinggi">Tinggi</SelectItem>
+                {projects.map((p) => (
+                  <SelectItem key={p.id} value={String(p.id)}>
+                    {p.title}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
 
+          {/* Penanggung Jawab */}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Penanggung Jawab
+            </label>
+            <Select
+              value={formData.user_id ? String(formData.user_id) : ""}
+              onValueChange={(val) =>
+                setFormData((prev) => ({ ...prev, user_id: Number(val) }))
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Pilih User" />
+              </SelectTrigger>
+              <SelectContent>
+                {users.map((u) => (
+                  <SelectItem key={u.id} value={String(u.id)}>
+                    {u.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Status */}
           <div>
             <label className="block text-sm font-medium mb-1">Status</label>
             <Select
               value={formData.status}
-              onValueChange={(val) => setFormData((prev) => ({ ...prev, status: val as Task["status"] }))}
+              onValueChange={(val) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  status: val as Task["status"],
+                }))
+              }
             >
-              <SelectTrigger><SelectValue placeholder="Pilih Status" /></SelectTrigger>
+              <SelectTrigger>
+                <SelectValue placeholder="Pilih Status" />
+              </SelectTrigger>
               <SelectContent>
                 <SelectItem value="baru">Baru</SelectItem>
                 <SelectItem value="proses">Proses</SelectItem>
@@ -172,21 +211,7 @@ export default function TaskFormModal({ isOpen, closeModal, task, users }: Props
             </Select>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Penanggung Jawab</label>
-            <Select
-              value={formData.assigned_to ? String(formData.assigned_to) : ""}
-              onValueChange={(val) => setFormData((prev) => ({ ...prev, assigned_to: Number(val) }))}
-            >
-              <SelectTrigger><SelectValue placeholder="Pilih User" /></SelectTrigger>
-              <SelectContent>
-                {users.map((u) => (
-                  <SelectItem key={u.id} value={String(u.id)}>{u.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
+          {/* Tombol Aksi */}
           <DialogFooter>
             <Button type="button" variant="outline" onClick={closeModal}>
               Batal
