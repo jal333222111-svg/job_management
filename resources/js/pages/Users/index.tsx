@@ -172,8 +172,8 @@ export default function UserIndex() {
           <CardContent>
             <Tabs defaultValue="admin">
               <TabsList className="grid grid-cols-3 w-full">
-                <TabsTrigger value="admin">Admin</TabsTrigger>
-                <TabsTrigger value="manager">Manager / CEO</TabsTrigger>
+                <TabsTrigger value="admin">Kepala divisi</TabsTrigger>
+                <TabsTrigger value="manager">Direktur</TabsTrigger>
                 <TabsTrigger value="staff">Staff</TabsTrigger>
               </TabsList>
               <TabsContent value="admin">{renderTable(groupedUsers.admin)}</TabsContent>

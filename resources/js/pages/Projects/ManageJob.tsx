@@ -7,7 +7,7 @@ export default function ManageJob() {
 
   return (
     <AppLayout>
-      <Head title={`Manage - ${project.title}`} />
+      <Head title={`Manage - ${project?.title}`} />
 
       <div className="p-6 space-y-6">
         {/* === Informasi Project === */}
@@ -17,20 +17,32 @@ export default function ManageJob() {
           animate={{ opacity: 1, y: 0 }}
         >
           <h1 className="text-2xl font-bold mb-2">{project.title}</h1>
-          <p className="text-gray-600 mb-2">{project.description}</p>
+          <p className="text-gray-600 mb-2">{project.description || "-"}</p>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
             <p>
-              <strong>Deadline:</strong> {project.deadline || "-"}
+              <strong>Tanggal Dibuat:</strong> {project.created_at ?? "-"}
             </p>
             <p>
-              <strong>Tingkatan:</strong> {project.tingkatan}
+              <strong>Deadline:</strong> {project.deadline ?? "-"}
             </p>
             <p>
-              <strong>Status:</strong> {project.status}
+              <strong>Status:</strong>{" "}
+              <span className="capitalize">{project.status}</span>
             </p>
-            <p>
-              <strong>Owner:</strong> {project.user?.name || "-"}
-            </p>
+
+            {project.file_path && (
+              <p>
+                <strong>File Pendukung:</strong>{" "}
+                <a
+                  href={`/storage/${project.file_path}`}
+                  target="_blank"
+                  className="text-blue-600 hover:underline"
+                >
+                  Lihat File
+                </a>
+              </p>
+            )}
           </div>
         </motion.div>
 
@@ -41,52 +53,29 @@ export default function ManageJob() {
             <div
               className="bg-green-500 h-3 rounded-full transition-all duration-500 ease-in-out"
               style={{ width: `${progress}%` }}
-            ></div>
+            />
           </div>
           <p>{progress}% selesai</p>
-        </div>
-
-        {/* === Pengguna yang Terlibat === */}
-        <div className="bg-white shadow rounded-2xl p-6">
-          <h2 className="text-lg font-semibold mb-3">Pengguna yang Terlibat</h2>
-          {project.users && project.users.length > 0 ? (
-            <ul className="list-disc ml-5 text-gray-700 space-y-1">
-              {project.users.map((user: any) => (
-                <li key={user.id}>
-                  {user.name}
-                  {user.position && (
-                    <>
-                      {" "}
-                      — <span className="text-gray-500">{user.position}</span>
-                    </>
-                  )}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-gray-500">Belum ada pengguna terlibat</p>
-          )}
         </div>
 
         {/* === Daftar Tugas === */}
         <div className="bg-white shadow rounded-2xl p-6">
           <h2 className="text-lg font-semibold mb-3">Daftar Tugas</h2>
+
           <div className="space-y-3">
-            {project.tasks && project.tasks.length > 0 ? (
+            {project.tasks?.length ? (
               project.tasks.map((task: any) => (
                 <div key={task.id} className="p-3 border rounded-lg">
                   <p className="font-semibold">{task.title}</p>
-                  <p className="text-gray-500">{task.description}</p>
+                  <p className="text-gray-500">{task.description || "-"}</p>
                   <p className="text-sm mt-1">
                     Status:{" "}
-                    <span className="font-medium capitalize">
-                      {task.status}
-                    </span>
+                    <span className="font-medium capitalize">{task.status}</span>
                   </p>
                   <p className="text-sm">
                     Dikerjakan oleh:{" "}
                     <span className="font-medium">
-                      {task.user?.name || "Belum ditugaskan"}
+                      {task.user?.name ?? "Belum ditugaskan"}
                     </span>
                   </p>
                 </div>

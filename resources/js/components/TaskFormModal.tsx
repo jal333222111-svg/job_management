@@ -25,6 +25,8 @@ type Task = {
   status: "baru" | "proses" | "selesai";
   user_id?: number | null;
   project_id: number | null;
+  tingkatan: "rendah" | "sedang" | "tinggi";
+  deadline?: string | null;
 };
 
 interface Props {
@@ -32,7 +34,7 @@ interface Props {
   closeModal: () => void;
   task?: Task | null;
   users: { id: number; name: string }[];
-  projects: { id: number; title: string }[];
+  projects: { id: number; title: string; deadline?: string }[];
 }
 
 export default function TaskFormModal({
@@ -48,6 +50,8 @@ export default function TaskFormModal({
     status: "baru",
     user_id: null,
     project_id: null,
+    tingkatan: "rendah",
+    deadline: null,
   });
 
   useEffect(() => {
@@ -59,6 +63,8 @@ export default function TaskFormModal({
         status: task.status,
         user_id: task.user_id ?? null,
         project_id: task.project_id ?? null,
+        tingkatan: task.tingkatan || "rendah",
+        deadline: task.deadline ?? null,
       });
     } else {
       setFormData({
@@ -67,6 +73,8 @@ export default function TaskFormModal({
         status: "baru",
         user_id: null,
         project_id: null,
+        tingkatan: "rendah",
+        deadline: null,
       });
     }
   }, [task]);
@@ -108,6 +116,10 @@ export default function TaskFormModal({
     }
   };
 
+  const selectedProject = projects.find(
+    (p) => p.id === formData.project_id
+  );
+
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>
       <DialogContent className="max-w-lg">
@@ -139,6 +151,26 @@ export default function TaskFormModal({
             />
           </div>
 
+          {/* Tingkatan */}
+          <div>
+            <label className="block text-sm font-medium mb-1">Tingkatan</label>
+            <Select
+              value={formData.tingkatan}
+              onValueChange={(val) =>
+                setFormData({ ...formData, tingkatan: val as Task["tingkatan"] })
+              }
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Pilih Tingkatan" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="rendah">Rendah</SelectItem>
+                <SelectItem value="sedang">Sedang</SelectItem>
+                <SelectItem value="tinggi">Tinggi</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           {/* Project */}
           <div>
             <label className="block text-sm font-medium mb-1">Project</label>
@@ -148,6 +180,8 @@ export default function TaskFormModal({
                 setFormData((prev) => ({
                   ...prev,
                   project_id: Number(val),
+                  deadline:
+                    projects.find((p) => p.id === Number(val))?.deadline ?? null,
                 }))
               }
             >
@@ -164,11 +198,16 @@ export default function TaskFormModal({
             </Select>
           </div>
 
+          {/* Deadline (readonly info) */}
+          {selectedProject && (
+            <div className="text-sm text-gray-600 italic">
+              Deadline Project: <b>{selectedProject.deadline ?? "-"}</b>
+            </div>
+          )}
+
           {/* Penanggung Jawab */}
           <div>
-            <label className="block text-sm font-medium mb-1">
-              Penanggung Jawab
-            </label>
+            <label className="block text-sm font-medium mb-1">Penanggung Jawab</label>
             <Select
               value={formData.user_id ? String(formData.user_id) : ""}
               onValueChange={(val) =>
@@ -211,7 +250,7 @@ export default function TaskFormModal({
             </Select>
           </div>
 
-          {/* Tombol Aksi */}
+          {/* Tombol */}
           <DialogFooter>
             <Button type="button" variant="outline" onClick={closeModal}>
               Batal

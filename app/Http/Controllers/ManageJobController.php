@@ -9,8 +9,8 @@ class ManageJobController extends Controller
 {
     public function show($id)
     {
-        // Ubah relasi dari 'employees' dan 'tasks.employee' ke 'users' dan 'tasks.user'
-        $project = Project::with(['users', 'tasks.user'])->findOrFail($id);
+        // Load hanya tasks dan user yang terkait
+        $project = Project::with('tasks.user')->findOrFail($id);
 
         // Hitung progress berdasarkan task yang selesai
         $totalTasks = $project->tasks->count();

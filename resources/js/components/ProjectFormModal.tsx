@@ -3,13 +3,6 @@ import { router } from "@inertiajs/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
   Dialog,
   DialogContent,
   DialogHeader,
@@ -23,8 +16,6 @@ type Project = {
   title: string;
   description: string | null;
   deadline: string | null;
-  tingkatan: "mudah" | "sedang" | "susah";
-  status: "belum di kerjakan" | "proses" | "selesai";
   file_path?: string | null;
 };
 
@@ -37,18 +28,14 @@ type Props = {
 export default function ProjectFormModal({ isOpen, onClose, project }: Props) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [status, setStatus] = useState<Project["status"]>("belum di kerjakan");
   const [deadline, setDeadline] = useState("");
-  const [tingkatan, setTingkatan] = useState<Project["tingkatan"]>("sedang");
   const [file, setFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (project) {
       setTitle(project.title);
       setDescription(project.description || "");
-      setStatus(project.status);
       setDeadline(project.deadline || "");
-      setTingkatan(project.tingkatan);
       setFile(null);
     } else {
       resetForm();
@@ -58,9 +45,7 @@ export default function ProjectFormModal({ isOpen, onClose, project }: Props) {
   const resetForm = () => {
     setTitle("");
     setDescription("");
-    setStatus("belum di kerjakan");
     setDeadline("");
-    setTingkatan("sedang");
     setFile(null);
   };
 
@@ -70,9 +55,7 @@ export default function ProjectFormModal({ isOpen, onClose, project }: Props) {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
-    formData.append("status", status);
     formData.append("deadline", deadline || "");
-    formData.append("tingkatan", tingkatan);
     if (file) formData.append("file", file);
 
     if (project?.id) {
@@ -90,12 +73,11 @@ export default function ProjectFormModal({ isOpen, onClose, project }: Props) {
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>
-            {project ? "Edit Project" : "Tambah Project"}
-          </DialogTitle>
+          <DialogTitle>{project ? "Edit Project" : "Tambah Project"}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+
           {/* Judul */}
           <div>
             <label className="text-sm font-medium">Judul Project</label>
@@ -103,7 +85,6 @@ export default function ProjectFormModal({ isOpen, onClose, project }: Props) {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Masukkan judul project"
               required
             />
           </div>
@@ -114,18 +95,17 @@ export default function ProjectFormModal({ isOpen, onClose, project }: Props) {
             <Textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Masukkan deskripsi project"
               rows={3}
             />
           </div>
 
-          {/* Upload File */}
+          {/* File */}
           <div>
-            <label className="text-sm font-medium">Upload File</label>
+            <label className="text-sm font-medium">File Pendukung</label>
             <Input
               type="file"
               onChange={(e) =>
-                setFile(e.target.files && e.target.files.length > 0 ? e.target.files[0] : null)
+                setFile(e.target.files?.length ? e.target.files[0] : null)
               }
             />
             {project?.file_path && (
@@ -134,49 +114,13 @@ export default function ProjectFormModal({ isOpen, onClose, project }: Props) {
                 <a
                   href={`/storage/${project.file_path}`}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  rel="noreferrer"
                   className="text-blue-600 hover:underline"
                 >
                   Lihat File
                 </a>
               </p>
             )}
-          </div>
-
-          {/* Status */}
-          <div>
-            <label className="text-sm font-medium">Status</label>
-            <Select
-              value={status}
-              onValueChange={(val) => setStatus(val as Project["status"])}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Pilih status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="belum di kerjakan">Belum dikerjakan</SelectItem>
-                <SelectItem value="proses">Proses</SelectItem>
-                <SelectItem value="selesai">Selesai</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Tingkatan */}
-          <div>
-            <label className="text-sm font-medium">Tingkat Kesulitan</label>
-            <Select
-              value={tingkatan}
-              onValueChange={(val) => setTingkatan(val as Project["tingkatan"])}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Pilih tingkat kesulitan" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="mudah">Mudah</SelectItem>
-                <SelectItem value="sedang">Sedang</SelectItem>
-                <SelectItem value="susah">Susah</SelectItem>
-              </SelectContent>
-            </Select>
           </div>
 
           {/* Deadline */}

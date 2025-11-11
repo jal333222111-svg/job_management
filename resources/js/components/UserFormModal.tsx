@@ -266,8 +266,8 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
                 <SelectValue placeholder="Pilih Role" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="admin">Admin</SelectItem>
-                <SelectItem value="manager">Manager</SelectItem>
+                <SelectItem value="admin">Kepala divisi</SelectItem>
+                <SelectItem value="manager">Direktur</SelectItem>
                 <SelectItem value="staff">Staff</SelectItem>
               </SelectContent>
             </Select>

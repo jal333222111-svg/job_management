@@ -1,187 +1,114 @@
-import { dashboard, login, register } from '@/routes';
-import { type SharedData } from '@/types';
-import { Head, Link, usePage } from '@inertiajs/react';
-import { useEffect } from 'react';
+import { Link } from "@inertiajs/react";
 
 export default function Welcome() {
-    const { auth } = usePage<SharedData>().props;
+  return (
+    <div className="font-sans text-gray-800">
+      {/* Navbar */}
+      <header className="w-full bg-[#003B73] py-3 shadow-md">
+        <div className="max-w-7xl mx-auto flex items-center justify-between px-6">
+          <div className="flex items-center gap-2 text-white font-bold text-lg">
+            <img src="/logo.png" alt="logo" className="h-10" />
+            <span>JOB MANAGEMENT</span>
+          </div>
 
-    useEffect(() => {
-        const script = document.createElement("script");
-        script.src = "https://unpkg.com/aos@next/dist/aos.js";
-        script.onload = () => {
-            // @ts-ignore
-            AOS.init({ duration: 800, once: true });
-        };
-        document.body.appendChild(script);
-    }, []);
+          <div className="flex items-center gap-3">
+            <Link href="/login" className="px-5 py-2 bg-white text-black rounded-lg hover:bg-gray-200 transition">
+              Login
+            </Link>
+            <Link href="/register" className="px-5 py-2 bg-white text-black rounded-lg hover:bg-gray-200 transition">
+              Daftar
+            </Link>
+          </div>
+        </div>
+      </header>
 
-    return (
-        <>
-            <Head title="Welcome">
-                <link rel="preconnect" href="https://fonts.bunny.net" />
-                <link
-                    href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600"
-                    rel="stylesheet"
-                />
-                <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
-            </Head>
+      {/* Hero Section */}
+      <section className="text-center py-24 bg-gradient-to-b from-white to-[#b7d4e7] px-4">
+        <div className="flex flex-col md:flex-row justify-center gap-10 items-center">
+          <img src="/favicon.png" className="h-32 md:h-40" />
+          <div>
+            <h1 className="text-4xl font-bold mb-2">Selamat datang</h1>
+            <p className="max-w-md mx-auto text-gray-700">
+              Aplikasi ini membantu tim dan perusahaan dalam mengelola tugas,
+              proyek, dan progres pekerjaan dengan efektif.
+            </p>
+            <Link href="/dashboard" className="mt-6 inline-block px-8 py-3 bg-black text-white text-lg border-4 border-blue-500 rounded-lg hover:scale-105 transition">
+              Mulai sekarang
+            </Link>
+          </div>
+          <img src="/favicon.png" className="h-32 md:h-40" />
+        </div>
+      </section>
 
-            <div className="flex flex-col items-center bg-[#FDFDFC] text-[#1b1b18] dark:bg-[#0a0a0a] dark:text-[#EDEDEC] w-full">
+      {/* Tentang Kami */}
+      <section className="max-w-5xl mx-auto bg-white rounded-xl shadow-md p-10 mt-10">
+        <h2 className="text-2xl font-bold text-center mb-6">Tentang Kami</h2>
+        <p className="text-justify leading-relaxed">
+          Aplikasi web ini dirancang untuk menjadi solusi lengkap dalam memudahkan
+          proses manajemen pekerjaan dan proyek dalam sebuah tim...
+        </p>
+        <br />
+        <p className="text-justify leading-relaxed">
+          Kami memahami bahwa pengelolaan pekerjaan sering kali memakan waktu...
+        </p>
+        <br />
+        <p className="text-justify leading-relaxed">
+          Tujuan utama kami adalah membantu tim bekerja lebih efisien...
+        </p>
+      </section>
 
-                {/* Header */}
-                <header className="absolute top-6 right-6 flex gap-4 text-sm lg:top-8 lg:right-8">
-                    {/* Menu tambahan bisa ditambahkan di sini */}
-                </header>
+      {/* Logo Mitra */}
+      <div className="mt-14 flex justify-center gap-10 flex-wrap px-6">
+        <img src="/logoupi .png" className="h-20" />
+        <img src="/dstilogo.png" className="h-20" />
+        <img src="/favicon.png" className="h-20" />
+      </div>
 
-                {/* Hero */}
-                <section
-                    className="flex flex-col items-center justify-center text-center py-20 px-6 lg:py-32 lg:px-8 space-y-6 lg:space-y-8"
-                    data-aos="fade-up"
-                >
-                    <h1 className="text-3xl font-semibold lg:text-5xl">
-                        Selamat Datang di Aplikasi Manajemen Pekerjaan
-                    </h1>
-                    <p className="max-w-md text-sm lg:text-base text-[#555] dark:text-[#ccc]">
-                        Aplikasi ini membantu tim dan perusahaan dalam mengelola tugas, proyek, dan progres pekerjaan dengan efektif.
-                    </p>
+      {/* Fitur */}
+      <section className="max-w-6xl mx-auto mt-14 p-8 bg-gray-200 rounded-xl shadow-lg">
+        <h2 className="text-2xl font-bold text-center mb-8">Fitur</h2>
 
-                    <div className="flex gap-4">
-                        {auth.user ? (
-                            // ✅ Jika sudah login
-                            <Link
-                                href={dashboard()}
-                                className="rounded-md border border-[#19140035] px-6 py-3 text-sm font-medium text-[#1b1b18] hover:border-[#1915014a] dark:border-[#3E3E3A] dark:hover:border-[#62605b] dark:text-[#EDEDEC]"
-                            >
-                                Dashboard
-                            </Link>
-                        ) : (
-                            // ✅ Jika belum login
-                            <>
-                                <Link
-                                    href={register()}
-                                    className="rounded-md px-6 py-3 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 transition"
-                                >
-                                    Registrasi
-                                </Link>
-                                <Link
-                                    href={login()}
-                                    className="rounded-md border px-6 py-3 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 dark:border-[#EDEDEC] transition"
-                                >
-                                    Log in
-                                </Link>
-                            </>
-                        )}
-                    </div>
-                </section>
-
-                {/* Tentang Kami */}
-                <section
-                    className="w-full bg-[#f9f9f9] dark:bg-[#111] py-20 px-6 lg:px-32 text-center shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out"
-                    data-aos="fade-up"
-                >
-                    <h2 className="text-2xl font-semibold mb-4 lg:text-4xl">Tentang Kami</h2>
-                    <p className="max-w-2xl mx-auto text-[#555] dark:text-[#ccc]">
-                        Aplikasi web ini dirancang untuk memudahkan manajemen pekerjaan dan proyek.
-                        Dengan fitur dashboard, penugasan, dan notifikasi, tim dapat bekerja lebih efisien,
-                        memantau progres pekerjaan, serta memastikan semua tugas selesai tepat waktu.
-                    </p>
-                </section>
-
-                {/* Fitur */}
-                <section
-                    className="w-full py-20 px-6 lg:px-32 text-center"
-                    data-aos="fade-up"
-                >
-                    <h2 className="text-2xl font-semibold mb-10 lg:text-4xl">Fitur Unggulan</h2>
-                    <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 max-w-7xl mx-auto">
-                        {[
-                            {
-                                title: "Dashboard Admin/Manager",
-                                desc: "Menampilkan ringkasan proyek, pekerjaan aktif, dan progres tim secara realtime."
-                            },
-                            {
-                                title: "Manajemen Pekerjaan",
-                                desc: "Input, update, dan pantau semua pekerjaan serta tugas tim dengan mudah."
-                            },
-                            {
-                                title: "Penugasan & Notifikasi",
-                                desc: "Menetapkan pekerjaan ke karyawan dan menerima notifikasi saat ada update atau deadline mendekat."
-                            },
-                            {
-                                title: "Progres Pekerjaan",
-                                desc: "Pantau status tiap pekerjaan dan progres tim dalam satu tampilan yang mudah dibaca."
-                            },
-                            {
-                                title: "Laporan & Analisis",
-                                desc: "Dapatkan laporan pekerjaan dan performa tim untuk evaluasi dan perencanaan ke depan."
-                            }
-                        ].map((item, index) => (
-                            <div
-                                key={index}
-                                data-aos="fade-up"
-                                className="p-6 border rounded-md dark:border-[#3E3E3A] shadow-md hover:shadow-xl transition-shadow duration-300 ease-in-out"
-                            >
-                                <h3 className="font-semibold mb-2">{item.title}</h3>
-                                <p className="text-[#555] dark:text-[#ccc]">{item.desc}</p>
-                            </div>
-                        ))}
-                    </div>
-                </section>
-
-                {/* Footer */}
-                <footer className="w-full bg-gray-600 dark:bg-gray-800 text-white">
-                    <div className="max-w-7xl mx-auto py-10 px-6 lg:px-32 flex flex-col md:flex-row justify-between gap-10 md:gap-0 text-sm">
-
-                        {/* Logo */}
-                        <div className="flex items-center md:flex-1">
-                            <img
-                                src="/images/upi-logo.png"
-                                alt="UPI Logo"
-                                className="h-10 mr-3"
-                            />
-                            <div className="hidden md:block text-xs">
-                                <p>Universitas Pendidikan Indonesia</p>
-                                <p className="text-[10px]">The Education University</p>
-                            </div>
-                        </div>
-
-                        {/* Contact */}
-                        <div className="md:flex-1">
-                            <h4 className="font-semibold mb-3 border-b border-white w-30 pb-1 text-xl">Contact Us</h4>
-                            <p className="text-xs leading-relaxed">
-                                Universitas Pendidikan Indonesia<br />
-                                Jl. Dr. Setiabudhi No. 229 Bandung 40154<br />
-                                Jawa Barat - Indonesia<br />
-                                E-mail: <a href="mailto:sekuniv_upi@upi.edu" className="underline">sekuniv_upi@upi.edu</a>
-                            </p>
-                        </div>
-
-                        {/* Follow Us */}
-                        <div className="md:flex-1">
-                            <h4 className="font-semibold mb-3 border-b border-white w-25 pb-1 text-xl">Follow Us</h4>
-                            <div className="flex space-x-4 text-xl">
-                                {[
-                                    { href: "https://twitter.com/upiofficial", path: "M23 3a10.9..." },
-                                    { href: "https://facebook.com/upiofficial", path: "M22 12a10..." },
-                                    { href: "https://instagram.com/upiofficial", path: "M7 2C4.2..." },
-                                    { href: "https://tiktok.com/@upiofficial", path: "M9 2a7..." }
-                                ].map((icon, idx) => (
-                                    <a key={idx} href={icon.href} target="_blank" rel="noopener noreferrer" className="hover:opacity-80">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-6 h-6" viewBox="0 0 24 24">
-                                            <path d={icon.path} />
-                                        </svg>
-                                    </a>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="bg-black text-center text-xs py-3">
-                        © Universitas Pendidikan Indonesia 2025
-                    </div>
-                </footer>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {[
+            "Manage Project",
+            "Manage Pekerjaan",
+            "Pemantauan",
+            "Manage Users",
+          ].map((item, i) => (
+            <div key={i} className="bg-white rounded-lg shadow-md p-4 flex flex-col items-center">
+              <h3 className="font-semibold mb-2">{item}</h3>
+              <img src="https://via.placeholder.com/300x160" className="rounded-lg" />
             </div>
-        </>
-    );
+          ))}
+        </div>
+      </section>
+
+      {/* Contact & Footer */}
+      <footer className="mt-20 bg-[#003B73] text-white py-10">
+        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 text-center md:text-left px-6">
+          <div>
+            <h3 className="font-bold mb-2">Contact Us</h3>
+            <p>Universitas Pendidikan Indonesia</p>
+            <p>Jl. Dr. Setiabudhi No. 229 Bandung</p>
+            <p>Jawa Barat - Indonesia</p>
+            <p>Email: sekuniv_upi@upi.edu</p>
+          </div>
+
+          <div>
+            <h3 className="font-bold mb-2 ml-17 ">Follow Us</h3>
+            <div className="flex justify-center md:justify-start gap-4 text-xl">
+              <a href="https://instagram.com/" target="_blank" className="hover:opacity-80"> <img src="ig.png" className="w-10" /></a>
+              <a href="https://tiktok.com/" target="_blank" className="hover:opacity-80"> <img src="tt.png" className="w-10" /></a>
+              <a href="https://facebook.com/" target="_blank" className="hover:opacity-80"><img src="fb.png" className="w-10" /></a>
+              <a href="https://twitter.com/" target="_blank" className="hover:opacity-80"><img src="twit.png" className="w-10" /></a>
+            </div>
+          </div>
+        </div>
+
+        <p className="text-center mt-6 text-sm">
+          © Universitas Pendidikan Indonesia 2025
+        </p>
+      </footer>
+    </div>
+  );
 }

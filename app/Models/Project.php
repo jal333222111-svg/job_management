@@ -12,36 +12,19 @@ class Project extends Model
     protected $fillable = [
         'title',
         'description',
-        'owner_id',
-        'deadline',
-        'tingkatan',
-        'status',
         'file_path',
+        'tanggal_mulai',
+        'deadline',
+        'status',
+        'tanggal_selesai',
     ];
 
     /**
-     * Relasi many-to-many ke User
-     * (user yang terlibat dalam project)
-     */
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'project_user')
-            ->withTimestamps();
-    }
-
-    /**
      * Relasi one-to-many ke Task
+     * (Project memiliki banyak tugas)
      */
     public function tasks()
     {
         return $this->hasMany(Task::class);
-    }
-
-    /**
-     * Relasi ke user pemilik project
-     */
-    public function owner()
-    {
-        return $this->belongsTo(User::class, 'owner_id');
     }
 }

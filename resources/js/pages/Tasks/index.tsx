@@ -20,14 +20,14 @@ type Task = {
   id: number;
   title: string;
   description?: string;
-  status: "belum dikerjakan" | "proses" | "selesai";
+  status: "baru" | "proses" | "selesai";
+  tingkatan: "rendah" | "sedang" | "tinggi";
+  deadline?: string | null;
   user?: { id: number; name: string } | null;
   project?: { id: number; title: string } | null;
 };
 
 export default function TaskIndex() {
-
-  
   const { tasks, users, projects } = usePage().props as {
     tasks: { data: Task[] };
     users: { id: number; name: string }[];
@@ -48,6 +48,36 @@ export default function TaskIndex() {
         onError: () => toast.error("Gagal menghapus pekerjaan"),
       });
     }
+  };
+
+  const statusBadge = (status: string) => {
+    const colors: Record<string, string> = {
+      baru: "bg-gray-300 text-gray-800",
+      proses: "bg-yellow-300 text-yellow-900",
+      selesai: "bg-green-400 text-green-900",
+    };
+    return (
+      <span
+        className={`px-2 py-1 text-xs font-semibold rounded ${colors[status]}`}
+      >
+        {status}
+      </span>
+    );
+  };
+
+  const tingkatanBadge = (level: string) => {
+    const colors: Record<string, string> = {
+      rendah: "bg-green-200 text-green-800",
+      sedang: "bg-blue-200 text-blue-800",
+      tinggi: "bg-red-200 text-red-800",
+    };
+    return (
+      <span
+        className={`px-2 py-1 text-xs font-semibold rounded ${colors[level]}`}
+      >
+        {level}
+      </span>
+    );
   };
 
   return (
@@ -90,7 +120,9 @@ export default function TaskIndex() {
                   <TableHead>Judul</TableHead>
                   <TableHead>Deskripsi</TableHead>
                   <TableHead>Project</TableHead>
+                  <TableHead>Tingkatan</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead>Deadline</TableHead>
                   <TableHead>Penanggung Jawab</TableHead>
                   <TableHead className="text-center">Aksi</TableHead>
                 </TableRow>
@@ -100,7 +132,7 @@ export default function TaskIndex() {
                 {tasks.data.length === 0 ? (
                   <TableRow>
                     <TableCell
-                      colSpan={6}
+                      colSpan={8}
                       className="text-center text-gray-500 py-6"
                     >
                       Belum ada pekerjaan
@@ -115,7 +147,9 @@ export default function TaskIndex() {
                       <TableCell>{t.title}</TableCell>
                       <TableCell>{t.description || "-"}</TableCell>
                       <TableCell>{t.project?.title || "-"}</TableCell>
-                      <TableCell className="capitalize">{t.status}</TableCell>
+                      <TableCell>{tingkatanBadge(t.tingkatan)}</TableCell>
+                      <TableCell>{statusBadge(t.status)}</TableCell>
+                      <TableCell>{t.deadline || "-"}</TableCell>
                       <TableCell>{t.user?.name || "-"}</TableCell>
 
                       <TableCell className="flex gap-2 justify-center">

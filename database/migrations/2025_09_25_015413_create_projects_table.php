@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -9,15 +10,25 @@ return new class extends Migration
     {
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
+            
             $table->string('title');
             $table->text('description')->nullable();
-            
-            $table->foreignId('owner_id')->nullable()->constrained('users')->nullOnDelete();
 
-            $table->date('deadline')->nullable();
-            $table->enum('tingkatan', ['mudah', 'sedang', 'susah'])->default('sedang');
-            $table->enum('status', ['belum di kerjakan', 'proses', 'selesai'])->default('belum di kerjakan');
+            // File pendukung, boleh kosong
             $table->string('file_path')->nullable();
+
+            // Otomatis terisi ketika task pertama dibuat
+            $table->date('tanggal_mulai')->nullable();
+
+            // Deadline ditentukan ketika membuat project
+            $table->date('deadline')->nullable();
+
+            // Status progress project (pastikan konsisten di frontend)
+            $table->enum('status', ['belum dikerjakan', 'proses', 'selesai'])->default('belum dikerjakan');
+
+            // Akan otomatis terisi ketika semua task selesai
+            $table->date('tanggal_selesai')->nullable();
+
             $table->timestamps();
         });
     }

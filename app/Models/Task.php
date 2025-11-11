@@ -14,14 +14,24 @@ class Task extends Model
         'user_id',
         'title',
         'description',
-        'status',
+        'status',      // belum di kerjakan | proses | selesai
+        'tingkatan',   // mudah | sedang | susah
+        'start_date',
+        'end_date',
+        'deadline',
     ];
 
+    /**
+     * Task milik 1 Project
+     */
     public function project()
     {
         return $this->belongsTo(Project::class);
     }
 
+    /**
+     * Task dikerjakan oleh 1 User (boleh kosong)
+     */
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id')->withDefault([
