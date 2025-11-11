@@ -13,7 +13,7 @@ class ReportController extends Controller
         $projects = Project::with([
             'jobs.officer', // officer = user yang mengerjakan job
         ])
-            ->orderBy('start_date', 'asc')
+            ->orderBy('created_at', 'asc')
             ->get();
 
         // Jika ingin menampilkan juga ringkasan total project (optional)
