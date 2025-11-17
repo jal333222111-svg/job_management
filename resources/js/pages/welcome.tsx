@@ -97,7 +97,7 @@ export default function Welcome() {
           <div>
             <h3 className="font-bold mb-2 ml-17 ">Follow Us</h3>
             <div className="flex justify-center md:justify-start gap-4 text-xl">
-              <a href="https://instagram.com/" target="_blank" className="hover:opacity-80"> <img src="ig.png" className="w-10" /></a>
+              <a href="https://instagram.com/https://www.instagram.com/upiofficial?igsh=MTJ6M295bGE0dnk3aA==" target="_blank" className="hover:opacity-80"> <img src="ig.png" className="w-10" /></a>
               <a href="https://tiktok.com/" target="_blank" className="hover:opacity-80"> <img src="tt.png" className="w-10" /></a>
               <a href="https://facebook.com/" target="_blank" className="hover:opacity-80"><img src="fb.png" className="w-10" /></a>
               <a href="https://twitter.com/" target="_blank" className="hover:opacity-80"><img src="twit.png" className="w-10" /></a>
