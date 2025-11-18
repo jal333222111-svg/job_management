@@ -23,7 +23,7 @@ type User = {
   email: string;
   phone?: string;
   position?: string;
-  role: string;
+  role: string; // direktur | divisi | staff
   is_active: boolean;
 };
 
@@ -34,7 +34,6 @@ type Props = {
 export default function UserIndex() {
   const { users } = usePage().props as unknown as Props;
 
-  // state untuk modal & pencarian
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -43,27 +42,26 @@ export default function UserIndex() {
     { title: "Data Karyawan", href: "/users" },
   ];
 
-  // 🔹 filter user sesuai pencarian
+  /** 🔍 Filter berdasarkan nama */
   const filteredUsers = users.filter((u) =>
     u.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // 🔹 kelompokkan user per role
+  /** 🔥 Kelompokkan berdasarkan role database baru */
   const groupedUsers = {
-    admin: filteredUsers.filter((u) => u.role === "admin"),
-    manager: filteredUsers.filter((u) => u.role === "manager"),
-    kepala: filteredUsers.filter((u) => u.role === "kepala_divisi"),
+    direktur: filteredUsers.filter((u) => u.role === "direktur"),
+    divisi: filteredUsers.filter((u) => u.role === "divisi"),
     staff: filteredUsers.filter((u) => u.role === "staff"),
   };
 
-  // 🔹 hapus user
+  /** ❌ Delete */
   const handleDelete = (id: number) => {
     if (confirm("Yakin ingin menghapus data ini?")) {
       router.delete(`/users/${id}`);
     }
   };
 
-  // 🔹 tabel reusable
+  /** 🧩 Render table reusable */
   const renderTable = (list: User[]) => (
     <Table>
       <TableHeader>
@@ -102,7 +100,6 @@ export default function UserIndex() {
                 )}
               </TableCell>
               <TableCell className="flex gap-2 justify-center">
-                {/* Tombol Edit */}
                 <Button
                   size="sm"
                   variant="outline"
@@ -114,7 +111,7 @@ export default function UserIndex() {
                 >
                   <Pencil className="w-4 h-4" />
                 </Button>
-                {/* Tombol Hapus */}
+
                 <Button
                   size="sm"
                   variant="destructive"
@@ -134,7 +131,8 @@ export default function UserIndex() {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <div className="px-8 py-4">
-        {/* 🔹 Header dengan search & tambah */}
+
+        {/* Header */}
         <div
           className="flex flex-col md:flex-row justify-between md:items-center gap-3 mb-6 
                      bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 
@@ -152,6 +150,7 @@ export default function UserIndex() {
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full md:w-64 bg-white/90 border-0 shadow-sm focus:ring-2 focus:ring-pink-400"
             />
+
             <Button
               onClick={() => {
                 setSelectedUser(null);
@@ -164,31 +163,40 @@ export default function UserIndex() {
           </div>
         </div>
 
-        {/* 🔹 Tabs per role */}
+        {/* Tabs Berdasarkan Role (DATABASE BARU) */}
         <Card>
           <CardHeader>
             <CardTitle>Data Karyawan</CardTitle>
           </CardHeader>
+
           <CardContent>
-            <Tabs defaultValue="admin">
+            <Tabs defaultValue="direktur">
               <TabsList className="grid grid-cols-3 w-full">
-                <TabsTrigger value="admin">Kepala divisi</TabsTrigger>
-                <TabsTrigger value="manager">Direktur</TabsTrigger>
+                <TabsTrigger value="direktur">Direktur</TabsTrigger>
+                <TabsTrigger value="divisi">Divisi</TabsTrigger>
                 <TabsTrigger value="staff">Staff</TabsTrigger>
               </TabsList>
-              <TabsContent value="admin">{renderTable(groupedUsers.admin)}</TabsContent>
-              <TabsContent value="manager">{renderTable(groupedUsers.manager)}</TabsContent>
-              <TabsContent value="staff">{renderTable(groupedUsers.staff)}</TabsContent>
+
+              <TabsContent value="direktur">
+                {renderTable(groupedUsers.direktur)}
+              </TabsContent>
+
+              <TabsContent value="divisi">
+                {renderTable(groupedUsers.divisi)}
+              </TabsContent>
+
+              <TabsContent value="staff">
+                {renderTable(groupedUsers.staff)}
+              </TabsContent>
             </Tabs>
           </CardContent>
         </Card>
 
-        {/* Modal Form User */}
+        {/* Modal */}
         <UserFormModal
           isOpen={isModalOpen}
           closeModal={() => setIsModalOpen(false)}
           user={selectedUser}
-          
         />
       </div>
     </AppLayout>

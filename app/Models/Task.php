@@ -2,40 +2,50 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'project_id',
-        'user_id',
-        'title',
-        'description',
-        'status',      // belum di kerjakan | proses | selesai
-        'tingkatan',   // mudah | sedang | susah
-        'start_date',
-        'end_date',
+        'nama_tugas',
+        'deskripsi',
+        'status',
         'deadline',
     ];
 
-    /**
-     * Task milik 1 Project
-     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        // Jika tugas dibuat → isi tanggal_mulai project
+        static::created(function ($task) {
+            if ($task->project->tanggal_mulai === null) {
+                $task->project->update([
+                    'tanggal_mulai' => now()->format('Y-m-d'),
+                    'status' => 'proses'
+                ]);
+            }
+        });
+
+        // Jika tugas diupdate → cek apakah semua selesai
+        static::updated(function ($task) {
+            $project = $task->project;
+
+            $totalTask = $project->tasks()->count();
+            $doneTask = $project->tasks()->where('status', 'selesai')->count();
+
+            if ($totalTask > 0 && $totalTask == $doneTask) {
+                $project->update([
+                    'tanggal_selesai' => now()->format('Y-m-d'),
+                    'status' => 'selesai'
+                ]);
+            }
+        });
+    }
+
     public function project()
     {
         return $this->belongsTo(Project::class);
-    }
-
-    /**
-     * Task dikerjakan oleh 1 User (boleh kosong)
-     */
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'user_id')->withDefault([
-            'name' => 'Belum ditugaskan',
-        ]);
     }
 }

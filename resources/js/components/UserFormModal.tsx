@@ -24,10 +24,9 @@ interface User {
   email: string;
   phone?: string;
   position?: string;
-  avatar?: File | null;
   password?: string;
   password_confirmation?: string;
-  role: "admin" | "manager" | "staff";
+  role: "direktur" | "divisi" | "staff";
   is_active: boolean;
 }
 
@@ -43,14 +42,13 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
     email: "",
     phone: "",
     position: "",
-    avatar: null,
     password: "",
     password_confirmation: "",
     role: "staff",
     is_active: true,
   });
 
-  /** 🔁 Update form saat user berubah (edit vs tambah) */
+  /** 🔁 Update form saat user berubah */
   useEffect(() => {
     if (user) {
       setFormData({
@@ -59,7 +57,6 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
         email: user.email,
         phone: user.phone || "",
         position: user.position || "",
-        avatar: null,
         password: "",
         password_confirmation: "",
         role: user.role,
@@ -77,7 +74,6 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
       email: "",
       phone: "",
       position: "",
-      avatar: null,
       password: "",
       password_confirmation: "",
       role: "staff",
@@ -97,13 +93,10 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
     data.append("role", formData.role);
     data.append("is_active", formData.is_active ? "1" : "0");
 
+    // Password hanya dikirim jika diisi
     if (formData.password) {
       data.append("password", formData.password);
       data.append("password_confirmation", formData.password_confirmation || "");
-    }
-
-    if (formData.avatar) {
-      data.append("avatar", formData.avatar);
     }
 
     const successMsg = user?.id
@@ -115,7 +108,7 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
       : "Gagal menambahkan user";
 
     if (user?.id) {
-      // 📝 Update user
+      // UPDATE USER
       data.append("_method", "put");
       router.post(`/users/${user.id}`, data, {
         forceFormData: true,
@@ -131,7 +124,7 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
         },
       });
     } else {
-      // ➕ Tambah user
+      // CREATE USER
       router.post("/users", data, {
         forceFormData: true,
         onSuccess: () => {
@@ -148,18 +141,12 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
     }
   };
 
-  /** 🧩 Input change handlers */
+  /** 🧩 Input change */
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData({ ...formData, avatar: e.target.files[0] });
-    }
-  };
-
-  /** 🧼 Reset form saat modal ditutup */
+  /** 🧼 Modal close */
   const handleClose = () => {
     closeModal();
     resetForm();
@@ -175,7 +162,7 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Name */}
           <div>
-            <label className="block text-sm font-medium mb-1">Name</label>
+            <label className="block text-sm font-medium mb-1">Nama</label>
             <Input
               type="text"
               name="name"
@@ -199,7 +186,7 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
 
           {/* Phone */}
           <div>
-            <label className="block text-sm font-medium mb-1">Phone</label>
+            <label className="block text-sm font-medium mb-1">No. Telepon</label>
             <Input
               type="text"
               name="phone"
@@ -210,7 +197,7 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
 
           {/* Position */}
           <div>
-            <label className="block text-sm font-medium mb-1">Position</label>
+            <label className="block text-sm font-medium mb-1">Jabatan</label>
             <Input
               type="text"
               name="position"
@@ -219,21 +206,16 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
             />
           </div>
 
-          {/* Avatar */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Avatar</label>
-            <Input type="file" name="avatar" onChange={handleFileChange} />
-          </div>
-
           {/* Password */}
           <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
+            <label className="block text-sm font-medium mb-1">
+              Password {user && "(kosongkan jika tidak diganti)"}
+            </label>
             <Input
               type="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
-              placeholder={user ? "Kosongkan jika tidak diubah" : ""}
               {...(user ? {} : { required: true })}
             />
           </div>
@@ -241,14 +223,13 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
           {/* Password Confirmation */}
           <div>
             <label className="block text-sm font-medium mb-1">
-              Konfirmasi Password
+              Konfirmasi Password {user && "(opsional)"}
             </label>
             <Input
               type="password"
               name="password_confirmation"
               value={formData.password_confirmation}
               onChange={handleChange}
-              placeholder={user ? "Kosongkan jika tidak diubah" : ""}
               {...(user ? {} : { required: true })}
             />
           </div>
@@ -259,15 +240,18 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
             <Select
               value={formData.role}
               onValueChange={(val) =>
-                setFormData((prev) => ({ ...prev, role: val as User["role"] }))
+                setFormData((prev) => ({
+                  ...prev,
+                  role: val as User["role"],
+                }))
               }
             >
               <SelectTrigger>
                 <SelectValue placeholder="Pilih Role" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="admin">Kepala divisi</SelectItem>
-                <SelectItem value="manager">Direktur</SelectItem>
+                <SelectItem value="direktur">Direktur</SelectItem>
+                <SelectItem value="divisi">Divisi</SelectItem>
                 <SelectItem value="staff">Staff</SelectItem>
               </SelectContent>
             </Select>
@@ -280,14 +264,17 @@ export default function UserFormModal({ isOpen, closeModal, user }: Props) {
                 type="checkbox"
                 checked={formData.is_active}
                 onChange={(e) =>
-                  setFormData({ ...formData, is_active: e.target.checked })
+                  setFormData({
+                    ...formData,
+                    is_active: e.target.checked,
+                  })
                 }
               />
               Aktif
             </label>
           </div>
 
-          {/* Tombol Aksi */}
+          {/* Buttons */}
           <DialogFooter>
             <Button type="button" variant="outline" onClick={handleClose}>
               Batal

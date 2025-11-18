@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
+// Controllers
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskController;
@@ -15,28 +17,31 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth'])->group(function () {
-    //Dashboard
+
+    // Dashboard
     Route::get('/dashboard', fn () => Inertia::render('dashboard'))->name('dashboard');
 
-    //CRUD Users
+    // Users (tanpa create, edit page)
     Route::resource('users', UserController::class)->except(['show', 'create', 'edit']);
 
-    //CRUD Projects
+    // Projects
     Route::resource('projects', ProjectController::class)->except(['show', 'create', 'edit']);
 
-    //CRUD Tasks
+    // Tasks
     Route::resource('tasks', TaskController::class)->except(['show', 'create', 'edit']);
 
-    //Tracking
+    // Tracking
     Route::get('/tracking', [TrackingController::class, 'index'])->name('tracking.index');
 
-    //Reports
+    // Reports
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
-    //Manage Job (Custom Route)
-    Route::get('/projects/{id}/manage', [ManageJobController::class, 'show'])->name('projects.manage');
-
+    // Manage Job
+    Route::get('/projects/{id}/manage', [ManageJobController::class, 'show'])
+        ->name('projects.manage');
 });
 
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';
+
+

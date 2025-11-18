@@ -1,180 +1,139 @@
-import { usePage } from "@inertiajs/react";
-import { FileText } from "lucide-react";
-import AppLayout from "@/layouts/app-layout";
+import { Head } from "@inertiajs/react";
+import { Card, CardContent } from "@/components/ui/card";
+import { BarChart3, ClipboardCheck, Clock, FolderOpen } from "lucide-react";
 
-type User = { id: number; name: string };
+export default function Reports({ 
+    totalProjects, 
+    totalTasks, 
+    completedTasks, 
+    pendingTasks,
+    latestProjects,
+    latestTasks
+}) {
 
-type Job = {
-  id: number;
-  title: string;
-  status: string;
-  due_date?: string | null;
-  officer?: User;
-};
+    const summary = [
+        {
+            title: "Total Projects",
+            value: totalProjects,
+            icon: <FolderOpen className="w-8 h-8" />,
+        },
+        {
+            title: "Total Tasks",
+            value: totalTasks,
+            icon: <BarChart3 className="w-8 h-8" />,
+        },
+        {
+            title: "Completed Tasks",
+            value: completedTasks,
+            icon: <ClipboardCheck className="w-8 h-8" />,
+        },
+        {
+            title: "Pending Tasks",
+            value: pendingTasks,
+            icon: <Clock className="w-8 h-8" />,
+        },
+    ];
 
-type Project = {
-  id: number;
-  title: string;
-  tingkatan: "mudah" | "sedang" | "susah";
-  status: "belum di kerjakan" | "proses" | "selesai";
-  start_date?: string | null;
-  end_date?: string | null;
-  jobs?: Job[];
-};
+    return (
+        <>
+            <Head title="Reports" />
 
-export default function ReportPrint() {
-  const { projects } = usePage().props as { projects: { data: Project[] } };
+            <div className="p-6 space-y-6">
+                <h1 className="text-3xl font-bold mb-4">Reports</h1>
 
-  return (
-    <AppLayout breadcrumbs={[{ title: "Cetak Laporan", href: "/reports/print" }]}>
-      <div className="p-8 space-y-8 print:p-0">
-        {/* Header */}
-        <div className="flex justify-between items-center border-b pb-4 print:border-none print:block print:text-center">
-          <div className="flex items-center gap-2 print:block print:mb-4">
-            <FileText className="w-7 h-7 text-blue-600 print:hidden" />
-            <h1 className="text-2xl font-semibold text-gray-800">
-              Laporan Project & Pekerjaan
-            </h1>
-          </div>
+                {/* Summary Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    {summary.map((item, index) => (
+                        <Card key={index} className="shadow-sm border bg-white rounded-xl p-3">
+                            <CardContent className="flex items-center gap-4">
+                                <div className="p-3 bg-gray-100 rounded-xl">
+                                    {item.icon}
+                                </div>
+                                <div>
+                                    <p className="text-gray-600 text-sm">{item.title}</p>
+                                    <p className="text-2xl font-bold">{item.value}</p>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    ))}
+                </div>
 
-          {/* Tombol Print */}
-          <button
-            onClick={() => window.print()}
-            className="px-5 py-2.5 bg-blue-600 text-white font-medium rounded-lg shadow hover:bg-blue-700 transition-all duration-150 print:hidden"
-          >
-            🖨️ Print
-          </button>
-        </div>
+                {/* Latest Projects */}
+                <div>
+                    <h2 className="text-xl font-semibold mb-2">Latest Projects</h2>
+                    <Card className="p-4 border shadow-sm rounded-xl">
+                        <table className="w-full text-left">
+                            <thead className="border-b">
+                                <tr>
+                                    <th className="py-2">ID</th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {latestProjects.length > 0 ? (
+                                    latestProjects.map((p) => (
+                                        <tr key={p.id} className="border-b">
+                                            <td className="py-2">{p.id}</td>
+                                            <td>{p.name}</td>
+                                            <td>
+                                                <span className="px-2 py-1 rounded bg-gray-200 text-sm">
+                                                    {p.status}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="3" className="text-center py-3 text-gray-500">
+                                            No projects available
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </Card>
+                </div>
 
-        {/* Tabel */}
-        <div className="bg-white shadow-md rounded-2xl p-6 overflow-x-auto print:shadow-none print:border-0 print:p-0">
-          <table className="w-full border-collapse text-sm">
-            <thead>
-              <tr className="bg-blue-50 text-gray-700 font-semibold">
-                <th className="p-3 border text-center w-10">No</th>
-                <th className="p-3 border">Judul Project</th>
-                <th className="p-3 border text-center">Tingkatan</th>
-                <th className="p-3 border text-center">Status Project</th>
-                <th className="p-3 border text-center">Tanggal Mulai</th>
-                <th className="p-3 border text-center">Tanggal Selesai</th>
-                <th className="p-3 border">Nama Pekerjaan</th>
-                <th className="p-3 border text-center">Status Pekerjaan</th>
-                <th className="p-3 border text-center">Dikerjakan Oleh</th>
-              </tr>
-            </thead>
-            <tbody>
-              {projects.data.length > 0 ? (
-                projects.data.map((project, i) => {
-                  const jobCount = project.jobs?.length || 0;
-
-                  if (jobCount === 0) {
-                    return (
-                      <tr
-                        key={project.id}
-                        className="odd:bg-white even:bg-gray-50 hover:bg-blue-50 transition-colors"
-                      >
-                        <td className="p-3 border text-center">{i + 1}</td>
-                        <td className="p-3 border font-medium text-gray-800">
-                          {project.title}
-                        </td>
-                        <td className="p-3 border text-center capitalize">
-                          {project.tingkatan}
-                        </td>
-                        <td className="p-3 border text-center">
-                          {project.status}
-                        </td>
-                        <td className="p-3 border text-center">
-                          {project.start_date || "-"}
-                        </td>
-                        <td className="p-3 border text-center">
-                          {project.end_date || "-"}
-                        </td>
-                        <td
-                          className="p-3 border italic text-gray-400 text-center"
-                          colSpan={3}
-                        >
-                          Tidak ada pekerjaan
-                        </td>
-                      </tr>
-                    );
-                  }
-
-                  return project.jobs?.map((job, jIndex) => (
-                    <tr
-                      key={`${project.id}-${job.id}`}
-                      className="odd:bg-white even:bg-gray-50 hover:bg-blue-50 transition-colors"
-                    >
-                      {jIndex === 0 && (
-                        <>
-                          <td
-                            className="p-3 border text-center font-medium"
-                            rowSpan={jobCount}
-                          >
-                            {i + 1}
-                          </td>
-                          <td
-                            className="p-3 border font-medium text-gray-800"
-                            rowSpan={jobCount}
-                          >
-                            {project.title}
-                          </td>
-                          <td
-                            className="p-3 border text-center capitalize"
-                            rowSpan={jobCount}
-                          >
-                            {project.tingkatan}
-                          </td>
-                          <td
-                            className="p-3 border text-center"
-                            rowSpan={jobCount}
-                          >
-                            {project.status}
-                          </td>
-                          <td
-                            className="p-3 border text-center"
-                            rowSpan={jobCount}
-                          >
-                            {project.start_date || "-"}
-                          </td>
-                          <td
-                            className="p-3 border text-center"
-                            rowSpan={jobCount}
-                          >
-                            {project.end_date || "-"}
-                          </td>
-                        </>
-                      )}
-                      <td className="p-3 border">{job.title}</td>
-                      <td className="p-3 border text-center">{job.status}</td>
-                      <td className="p-3 border text-center">
-                        {job.officer?.name || "-"}
-                      </td>
-                    </tr>
-                  ));
-                })
-              ) : (
-                <tr>
-                  <td
-                    colSpan={9}
-                    className="text-center text-gray-500 py-6 border italic"
-                  >
-                    Tidak ada data project
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Footer cetak */}
-        <div className="text-sm text-gray-500 mt-8 text-right print:text-center print:mt-4">
-          Dicetak pada: {new Date().toLocaleDateString("id-ID", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          })}
-        </div>
-      </div>
-    </AppLayout>
-  );
+                {/* Latest Tasks */}
+                <div>
+                    <h2 className="text-xl font-semibold mb-2">Latest Tasks</h2>
+                    <Card className="p-4 border shadow-sm rounded-xl">
+                        <table className="w-full text-left">
+                            <thead className="border-b">
+                                <tr>
+                                    <th className="py-2">ID</th>
+                                    <th>Task</th>
+                                    <th>Project</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {latestTasks.length > 0 ? (
+                                    latestTasks.map((t) => (
+                                        <tr key={t.id} className="border-b">
+                                            <td className="py-2">{t.id}</td>
+                                            <td>{t.name}</td>
+                                            <td>{t.project_id}</td>
+                                            <td>
+                                                <span className="px-2 py-1 rounded bg-gray-200 text-sm">
+                                                    {t.status}
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="4" className="text-center py-3 text-gray-500">
+                                            No tasks available
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </Card>
+                </div>
+            </div>
+        </>
+    );
 }
