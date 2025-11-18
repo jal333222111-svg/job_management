@@ -11,7 +11,7 @@ use Inertia\Inertia;
 class TaskController extends Controller
 {
     /** ===========================
-     *  UPDATE STATUS PROJECT OTOMATIS
+     *  UPDATE STATUS PROJECT
      *  =========================== */
     private function updateProjectStatus(Project $project)
     {
@@ -41,14 +41,13 @@ class TaskController extends Controller
 
             'users' => User::select('id', 'name')->get(),
 
-            // hanya tampilkan project yang belum selesai
             'projects' => Project::select('id', 'title', 'deadline')
                 ->where('status', '!=', 'selesai')
                 ->get(),
         ]);
     }
 
-    /** ➕ Tambah tugas */
+    /** ➕ Simpan tugas */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -62,7 +61,7 @@ class TaskController extends Controller
             'end_date'    => 'nullable|date',
         ]);
 
-        $project = Project::find($validated['project_id']);
+        $project = Project::findOrFail($validated['project_id']);
 
         $validated['deadline'] = $project->deadline;
 
@@ -79,14 +78,14 @@ class TaskController extends Controller
 
         $task = Task::create($validated);
 
-        // 🔥 update status project berdasarkan task
+        // update status project
         $this->updateProjectStatus($task->project);
 
         return redirect()->route('tasks.index')
             ->with('success', 'Tugas berhasil ditambahkan');
     }
 
-    /** ✏️ Update tugas */
+    /** ✏ Update tugas */
     public function update(Request $request, Task $task)
     {
         $validated = $request->validate([
@@ -100,14 +99,15 @@ class TaskController extends Controller
             'end_date'    => 'nullable|date',
         ]);
 
-        $project = Project::find($validated['project_id']);
+        $project = Project::findOrFail($validated['project_id']);
         $validated['deadline'] = $project->deadline;
 
-        // atur tanggal jika status berubah
+        // otomatis tanggal mulai
         if ($validated['status'] === 'proses' && $task->start_date === null) {
             $validated['start_date'] = now();
         }
 
+        // otomatis tanggal selesai
         if ($validated['status'] === 'selesai') {
             $validated['start_date'] = $task->start_date ?? now();
             $validated['end_date'] = now();
@@ -115,21 +115,20 @@ class TaskController extends Controller
 
         $task->update($validated);
 
-        // 🔥 update status project
+        // update project
         $this->updateProjectStatus($task->project);
 
         return redirect()->route('tasks.index')
             ->with('success', 'Tugas berhasil diperbarui');
     }
 
-    /** ❌ Hapus tugas */
+    /** ❌ Hapus */
     public function destroy(Task $task)
     {
         $project = $task->project;
 
         $task->delete();
 
-        // 🔥 update status project
         $this->updateProjectStatus($project);
 
         return redirect()->route('tasks.index')

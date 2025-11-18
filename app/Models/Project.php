@@ -3,10 +3,15 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Carbon\Carbon;
 
 class Project extends Model
 {
+    use HasFactory;
+
+    protected $table = 'projects';
+
     protected $fillable = [
         'title',
         'description',
@@ -17,13 +22,26 @@ class Project extends Model
         'file_path',
     ];
 
-    // Relasi
+    // DEFAULT ATTRIBUTE
+    protected $attributes = [
+        'status' => 'belum dikerjakan',
+    ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELASI
+    |--------------------------------------------------------------------------
+    */
     public function tasks()
     {
         return $this->hasMany(Task::class);
     }
 
-    // ACCESSORS FORMAT TANGGAL
+    /*
+    |--------------------------------------------------------------------------
+    | ACCESSORS FORMAT TANGGAL
+    |--------------------------------------------------------------------------
+    */
     public function getTanggalMulaiFormattedAttribute()
     {
         return $this->tanggal_mulai
@@ -43,5 +61,17 @@ class Project extends Model
         return $this->deadline
             ? Carbon::parse($this->deadline)->translatedFormat('d F Y')
             : '-';
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | ACCESSOR: File URL
+    |--------------------------------------------------------------------------
+    */
+    public function getFileUrlAttribute()
+    {
+        return $this->file_path
+            ? asset('storage/' . $this->file_path)
+            : null;
     }
 }
