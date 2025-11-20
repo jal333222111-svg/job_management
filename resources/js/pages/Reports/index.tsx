@@ -1,50 +1,36 @@
-import { Head } from "@inertiajs/react";
+import { Head, usePage } from "@inertiajs/react";
 import { Card, CardContent } from "@/components/ui/card";
 import { BarChart3, ClipboardCheck, Clock, FolderOpen } from "lucide-react";
+import AppLayout from "@/layouts/app-layout";
 
-export default function Reports({ 
-    totalProjects, 
-    totalTasks, 
-    completedTasks, 
-    pendingTasks,
-    latestProjects,
-    latestTasks
-}) {
+export default function Reports() {
+
+    const {
+        totalProjects,
+        totalTasks,
+        completedTasks,
+        pendingTasks,
+        latestProjects,
+        latestTasks,
+    } = usePage().props;
 
     const summary = [
-        {
-            title: "Total Projects",
-            value: totalProjects,
-            icon: <FolderOpen className="w-8 h-8" />,
-        },
-        {
-            title: "Total Tasks",
-            value: totalTasks,
-            icon: <BarChart3 className="w-8 h-8" />,
-        },
-        {
-            title: "Completed Tasks",
-            value: completedTasks,
-            icon: <ClipboardCheck className="w-8 h-8" />,
-        },
-        {
-            title: "Pending Tasks",
-            value: pendingTasks,
-            icon: <Clock className="w-8 h-8" />,
-        },
+        { title: "Total Projects", value: totalProjects, icon: <FolderOpen className="w-8 h-8" /> },
+        { title: "Total Tasks", value: totalTasks, icon: <BarChart3 className="w-8 h-8" /> },
+        { title: "Completed Tasks", value: completedTasks, icon: <ClipboardCheck className="w-8 h-8" /> },
+        { title: "Pending Tasks", value: pendingTasks, icon: <Clock className="w-8 h-8" /> },
     ];
 
     return (
-        <>
+        <AppLayout title="Laporan">
             <Head title="Reports" />
 
             <div className="p-6 space-y-6">
                 <h1 className="text-3xl font-bold mb-4">Reports</h1>
-
                 {/* Summary Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    {summary.map((item, index) => (
-                        <Card key={index} className="shadow-sm border bg-white rounded-xl p-3">
+                    {summary.map((item, i) => (
+                        <Card key={i} className="shadow-sm border bg-white rounded-xl p-3">
                             <CardContent className="flex items-center gap-4">
                                 <div className="p-3 bg-gray-100 rounded-xl">
                                     {item.icon}
@@ -66,7 +52,7 @@ export default function Reports({
                             <thead className="border-b">
                                 <tr>
                                     <th className="py-2">ID</th>
-                                    <th>Name</th>
+                                    <th>Title</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
@@ -75,7 +61,7 @@ export default function Reports({
                                     latestProjects.map((p) => (
                                         <tr key={p.id} className="border-b">
                                             <td className="py-2">{p.id}</td>
-                                            <td>{p.name}</td>
+                                            <td>{p.title}</td>
                                             <td>
                                                 <span className="px-2 py-1 rounded bg-gray-200 text-sm">
                                                     {p.status}
@@ -103,7 +89,7 @@ export default function Reports({
                             <thead className="border-b">
                                 <tr>
                                     <th className="py-2">ID</th>
-                                    <th>Task</th>
+                                    <th>Title</th>
                                     <th>Project</th>
                                     <th>Status</th>
                                 </tr>
@@ -113,8 +99,8 @@ export default function Reports({
                                     latestTasks.map((t) => (
                                         <tr key={t.id} className="border-b">
                                             <td className="py-2">{t.id}</td>
-                                            <td>{t.name}</td>
-                                            <td>{t.project_id}</td>
+                                            <td>{t.title}</td>
+                                            <td>{t.project?.title ?? "-"}</td>
                                             <td>
                                                 <span className="px-2 py-1 rounded bg-gray-200 text-sm">
                                                     {t.status}
@@ -133,7 +119,8 @@ export default function Reports({
                         </table>
                     </Card>
                 </div>
+                {/* ... lanjut sama seperti sebelumnya ... */}
             </div>
-        </>
+        </AppLayout>
     );
 }
