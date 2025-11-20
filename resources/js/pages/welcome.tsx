@@ -5,7 +5,7 @@ export default function Welcome() {
     <div className="font-sans text-gray-800">
 
       {/* Hero Section */}
-      <section className="text-center py-24 bg-gradient-to-b from-purple-500 to-red-500 px-4">
+      <section className="text-center py-24 bg-gradient-to-b from-red-500 to-gray-500 px-4">
         <div className="flex flex-col md:flex-row justify-center gap-10 items-center">
           
           <img src="/favicon.png" className="h-32 md:h-40" />
@@ -137,11 +137,6 @@ export default function Welcome() {
         <li>
           <a href="https://dsti.upi.edu/" target="_blank" className="hover:underline">
             Direktoran Sistem Teknologi Informasi & Pusat Data
-          </a>
-        </li>
-        <li>
-          <a href="https://jurnal.upi.edu" target="_blank" className="hover:underline">
-            Jurnal UPI
           </a>
         </li>
       </ul>
