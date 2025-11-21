@@ -1,4 +1,5 @@
 import { Head, usePage } from "@inertiajs/react";
+import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { BarChart3, ClipboardCheck, Clock, FolderOpen } from "lucide-react";
 import AppLayout from "@/layouts/app-layout";
@@ -14,6 +15,19 @@ export default function Reports() {
         latestTasks,
     } = usePage().props;
 
+    const [selectedProject, setSelectedProject] = useState(null);
+    const [projectTasks, setProjectTasks] = useState([]);
+
+    // Load tasks by project
+    const loadTasks = async (project) => {
+        setSelectedProject(project);
+
+        const res = await fetch(`/reports/project/${project.id}/tasks`);
+        const data = await res.json();
+
+        setProjectTasks(data);
+    };
+
     const summary = [
         { title: "Total Projects", value: totalProjects, icon: <FolderOpen className="w-8 h-8" /> },
         { title: "Total Tasks", value: totalTasks, icon: <BarChart3 className="w-8 h-8" /> },
@@ -27,6 +41,7 @@ export default function Reports() {
 
             <div className="p-6 space-y-6">
                 <h1 className="text-3xl font-bold mb-4">Reports</h1>
+
                 {/* Summary Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     {summary.map((item, i) => (
@@ -59,7 +74,11 @@ export default function Reports() {
                             <tbody>
                                 {latestProjects.length > 0 ? (
                                     latestProjects.map((p) => (
-                                        <tr key={p.id} className="border-b">
+                                        <tr
+                                            key={p.id}
+                                            className="border-b hover:bg-gray-100 cursor-pointer"
+                                            onClick={() => loadTasks(p)}
+                                        >
                                             <td className="py-2">{p.id}</td>
                                             <td>{p.title}</td>
                                             <td>
@@ -81,45 +100,47 @@ export default function Reports() {
                     </Card>
                 </div>
 
-                {/* Latest Tasks */}
-                <div>
-                    <h2 className="text-xl font-semibold mb-2">Latest Tasks</h2>
-                    <Card className="p-4 border shadow-sm rounded-xl">
-                        <table className="w-full text-left">
-                            <thead className="border-b">
-                                <tr>
-                                    <th className="py-2">ID</th>
-                                    <th>Title</th>
-                                    <th>Project</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {latestTasks.length > 0 ? (
-                                    latestTasks.map((t) => (
-                                        <tr key={t.id} className="border-b">
-                                            <td className="py-2">{t.id}</td>
-                                            <td>{t.title}</td>
-                                            <td>{t.project?.title ?? "-"}</td>
-                                            <td>
-                                                <span className="px-2 py-1 rounded bg-gray-200 text-sm">
-                                                    {t.status}
-                                                </span>
+                {/* Tasks of the Selected Project */}
+                {selectedProject && (
+                    <div>
+                        <h2 className="text-xl font-semibold mt-4 mb-2">
+                            Tasks for: {selectedProject.title}
+                        </h2>
+
+                        <Card className="p-4 border shadow-sm rounded-xl">
+                            <table className="w-full text-left">
+                                <thead className="border-b">
+                                    <tr>
+                                        <th className="py-2">ID</th>
+                                        <th>Title</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {projectTasks.length > 0 ? (
+                                        projectTasks.map((t) => (
+                                            <tr key={t.id} className="border-b">
+                                                <td className="py-2">{t.id}</td>
+                                                <td>{t.title}</td>
+                                                <td>
+                                                    <span className="px-2 py-1 rounded bg-gray-200 text-sm">
+                                                        {t.status}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan="3" className="text-center py-3 text-gray-500">
+                                                No tasks found
                                             </td>
                                         </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan="4" className="text-center py-3 text-gray-500">
-                                            No tasks available
-                                        </td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </Card>
-                </div>
-                {/* ... lanjut sama seperti sebelumnya ... */}
+                                    )}
+                                </tbody>
+                            </table>
+                        </Card>
+                    </div>
+                )}
             </div>
         </AppLayout>
     );

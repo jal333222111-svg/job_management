@@ -38,6 +38,14 @@ Route::middleware(['auth'])->group(function () {
     // Reports
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
 
+    // ➕ Tambahan route untuk ambil tasks berdasarkan project
+    Route::get('/reports/project/{id}/tasks', function ($id) {
+        return \App\Models\Task::where('project_id', $id)
+            ->with('project')
+            ->orderBy('id', 'desc')
+            ->get();
+    })->name('reports.project.tasks');
+
     // Manage Job
     Route::get('/projects/{id}/manage', [ManageJobController::class, 'show'])
         ->name('projects.manage');

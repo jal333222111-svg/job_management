@@ -10,7 +10,7 @@ class ReportController extends Controller
 {
     public function index()
     {
-        // Statistik utama
+        // Statistik
         $totalProjects = Project::count();
         $totalTasks = Task::count();
         $completedTasks = Task::where('status', 'selesai')->count();
@@ -30,14 +30,12 @@ class ReportController extends Controller
             ->get();
 
         return Inertia::render('Reports/index', [
-            'stats' => [
-                'totalProjects' => $totalProjects,
-                'totalTasks' => $totalTasks,
-                'completedTasks' => $completedTasks,
-                'pendingTasks' => $pendingTasks,
-            ],
-            'latestProjects' => $latestProjects,
-            'latestTasks' => $latestTasks,
+            'totalProjects'   => $totalProjects,
+            'totalTasks'      => $totalTasks,
+            'completedTasks'  => $completedTasks,
+            'pendingTasks'    => $pendingTasks,
+            'latestProjects'  => $latestProjects,
+            'latestTasks'     => $latestTasks,
         ]);
     }
 }
